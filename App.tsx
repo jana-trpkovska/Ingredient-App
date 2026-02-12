@@ -1,23 +1,11 @@
-import { Text, View, StyleSheet } from "react-native";
+import AppNavigator from './src/navigation/AppNavigator';
+import { StatusBar } from 'expo-status-bar';
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Ingredient App</Text>
-      <Text>Hello World!</Text>
-    </View>
+  <>
+    <StatusBar style="dark" />
+    <AppNavigator />
+  </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "600",
-    marginBottom: 8,
-  },
-});
