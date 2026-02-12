@@ -17,9 +17,7 @@ export default function HomeScreen() {
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
           <IngredientCard
-            name={item.name}
-            amount={item.amount}
-            imageUri={item.imageUri}
+            ingredient={item} // pass the full ingredient object
             onPress={() => console.log('Pressed', item.name)}
           />
         )}

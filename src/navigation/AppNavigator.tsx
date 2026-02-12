@@ -6,7 +6,6 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './TabNavigator';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
 import HeaderTitle from '../components/HeaderTitle';
-import appConfig from '../../app.json'
 
 import avatarIcon from '../assets/avatar.png';
 
@@ -17,6 +16,9 @@ export default function AppNavigator() {
     <NavigationContainer>
       <Stack.Navigator
         screenOptions={({ navigation }) => ({
+          headerStyle: {
+            backgroundColor: '#FFE1A2'
+          },
           headerTitle: () => <HeaderTitle/>,
           headerTitleAlign: 'left',
 

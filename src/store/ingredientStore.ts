@@ -1,11 +1,5 @@
 import { create } from 'zustand';
-
-export interface Ingredient {
-  id: string;
-  name: string;
-  amount?: string;
-  imageUri?: string;
-}
+import { Ingredient } from '../types/ingredient';
 
 interface IngredientStore {
   ingredients: Ingredient[];
@@ -15,9 +9,9 @@ interface IngredientStore {
 
 export const useIngredientStore = create<IngredientStore>((set) => ({
   ingredients: [
-    { id: '1', name: 'Tomato', amount: '3 pcs', imageUri: '' },
-    { id: '2', name: 'Cheese', amount: '200g', imageUri: '' },
-    { id: '3', name: 'Eggs', amount: '6 pcs', imageUri: '' },
+    { id: '1', name: 'Tomato', quantity: 3, unit: 'pcs', category: 'vegetables',  image: '' },
+    { id: '2', name: 'Cheese', quantity: 200, unit: 'g', category: 'dairy',  image: '' },
+    { id: '3', name: 'Apple', quantity: 1, unit: 'kg', category: 'fruits',  image: '' },
   ],
   addIngredient: (ingredient) =>
     set((state) => ({ ingredients: [...state.ingredients, ingredient] })),

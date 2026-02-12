@@ -1,25 +1,27 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
+import { Ingredient } from '../types/ingredient';
 
 interface Props {
-  name: string;
-  amount?: string;
-  imageUri?: string;
+  ingredient: Ingredient;
   onPress?: () => void;
 }
 
-const IngredientCard = ({ name, amount, imageUri, onPress }: Props) => {
+const IngredientCard = ({ ingredient, onPress }: Props) => {
+  const { name, image, category, quantity, unit } = ingredient;
+
   return (
     <TouchableOpacity
       onPress={onPress}
       style={{
-        width: 120,
-        height: 150,
+        width: 140,
+        height: 180,
         marginRight: 12,
         borderRadius: 8,
         backgroundColor: '#f5f5f5',
         justifyContent: 'center',
         alignItems: 'center',
+        padding: 8,
       }}
     >
       <View
@@ -29,17 +31,24 @@ const IngredientCard = ({ name, amount, imageUri, onPress }: Props) => {
           backgroundColor: '#ddd',
           borderRadius: 40,
           marginBottom: 8,
+          overflow: 'hidden',
         }}
       >
-        {imageUri ? (
+        {image ? (
           <Image
-            source={{ uri: imageUri }}
+            source={{ uri: image }}
             style={{ width: 80, height: 80, borderRadius: 40 }}
           />
         ) : null}
       </View>
-      <Text>{name}</Text>
-      {amount && <Text>{amount}</Text>}
+
+      <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{name}</Text>
+      <Text style={{ fontSize: 12, color: '#666' }}>{category}</Text>
+      {quantity !== undefined && (
+        <Text style={{ fontSize: 12, color: '#333' }}>
+          {quantity} {unit || ''}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };
