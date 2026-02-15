@@ -1,14 +1,16 @@
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, StyleSheet } from 'react-native';
 import React from 'react';
 import IngredientCard from '../../components/IngredientCard';
 import { useIngredientStore } from '../../store/ingredientStore';
+import { styles } from './Home.styles';
+
 
 export default function HomeScreen() {
   const ingredients = useIngredientStore((state) => state.ingredients);
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
-      <Text style={{ fontSize: 24, marginBottom: 12 }}>Your Ingredients</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Your Ingredients</Text>
 
       <FlatList
         data={ingredients}
@@ -17,7 +19,7 @@ export default function HomeScreen() {
         showsHorizontalScrollIndicator={false}
         renderItem={({ item }) => (
           <IngredientCard
-            ingredient={item} // pass the full ingredient object
+            ingredient={item}
             onPress={() => console.log('Pressed', item.name)}
           />
         )}

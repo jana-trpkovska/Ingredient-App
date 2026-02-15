@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Platform } from 'react-native';
+import { Image } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -11,6 +11,9 @@ import homeIcon from '../assets/home.png';
 import cookingIcon from '../assets/cooking.png';
 import settingsIcon from '../assets/setting.png';
 
+import { colors } from '../themes/colors';
+import { spacing } from '../themes/spacing';
+
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
@@ -20,11 +23,11 @@ export default function TabNavigator() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#FF6B6B',
-        tabBarInactiveTintColor: '#999',
+        tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.textSecondary,
         tabBarStyle: {
           height: 60 + insets.bottom,
-          paddingBottom: 10 + insets.bottom,
+          paddingBottom: spacing.sm + insets.bottom,
         },
       }}
     >
@@ -38,7 +41,7 @@ export default function TabNavigator() {
               style={{
                 width: 24,
                 height: 24,
-                tintColor: focused ? '#FF6B6B' : '#999',
+                tintColor: focused ? colors.primary : colors.textSecondary,
               }}
             />
           ),
@@ -55,7 +58,7 @@ export default function TabNavigator() {
               style={{
                 width: 24,
                 height: 24,
-                tintColor: focused ? '#FF6B6B' : '#999',
+                tintColor: focused ? colors.primary : colors.textSecondary,
               }}
             />
           ),
@@ -72,7 +75,7 @@ export default function TabNavigator() {
               style={{
                 width: 24,
                 height: 24,
-                tintColor: focused ? '#FF6B6B' : '#999',
+                tintColor: focused ? colors.primary : colors.textSecondary,
               }}
             />
           ),

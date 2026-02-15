@@ -1,6 +1,8 @@
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { Ingredient } from '../types/ingredient';
+import { colors} from '../themes/colors';
+import { spacing } from '../themes/spacing';
 
 interface Props {
   ingredient: Ingredient;
@@ -16,21 +18,21 @@ const IngredientCard = ({ ingredient, onPress }: Props) => {
       style={{
         width: 140,
         height: 180,
-        marginRight: 12,
+        marginRight: spacing.sm,
         borderRadius: 8,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: colors.cardBackground,
         justifyContent: 'center',
         alignItems: 'center',
-        padding: 8,
+        padding: spacing.sm,
       }}
     >
       <View
         style={{
           width: 80,
           height: 80,
-          backgroundColor: '#ddd',
+          backgroundColor: colors.secondaryBackground,
           borderRadius: 40,
-          marginBottom: 8,
+          marginBottom: spacing.sm,
           overflow: 'hidden',
         }}
       >
@@ -42,10 +44,12 @@ const IngredientCard = ({ ingredient, onPress }: Props) => {
         ) : null}
       </View>
 
-      <Text style={{ fontWeight: 'bold', textAlign: 'center' }}>{name}</Text>
-      <Text style={{ fontSize: 12, color: '#666' }}>{category}</Text>
+      <Text style={{ fontWeight: 'bold', textAlign: 'center', color: colors.textPrimary }}>
+        {name}
+      </Text>
+      <Text style={{ fontSize: 12, color: colors.textSecondary }}>{category}</Text>
       {quantity !== undefined && (
-        <Text style={{ fontSize: 12, color: '#333' }}>
+        <Text style={{ fontSize: 12, color: colors.textPrimary }}>
           {quantity} {unit || ''}
         </Text>
       )}
