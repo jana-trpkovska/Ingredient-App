@@ -14,7 +14,7 @@ export default function LoginScreen({ navigation }: any) {
   const { setCurrentUser } = useUserStore();
 
   const handleLogin = () => {
-    const user = getUserByUsername(username);
+    const user = getUserByUsername(username.trim());
     if (!username || !password) {
       Alert.alert('Error', 'Please fill in all fields');
       return;

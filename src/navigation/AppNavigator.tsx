@@ -13,6 +13,7 @@ import avatarIcon from '../assets/avatar.png';
 import { colors } from '../themes/colors';
 import { spacing } from '../themes/spacing';
 import EditProfileScreen from '../screens/EditProfile/EditProfileScreen';
+import AddIngredientScreen from '../screens/AddIngredient/AddIngredientScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +40,10 @@ export default function AppNavigator() {
         <Stack.Screen 
           name="MainTabs" 
           component={TabNavigator} 
+        />
+        <Stack.Screen 
+          name="AddIngredient" 
+          component={AddIngredientScreen} 
         />
 
         <Stack.Screen 

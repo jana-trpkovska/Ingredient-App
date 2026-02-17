@@ -14,4 +14,24 @@ export const styles = StyleSheet.create({
     color: colors.textPrimary,
     fontWeight: '600',
   },
+  message: {
+  fontSize: 16,
+  color: colors.textSecondary,
+  marginTop: spacing.md,
+},
+  fixedButton: {
+    position: 'absolute',
+    bottom: 16,
+    left: spacing.lg,
+    right: spacing.lg,
+    backgroundColor: colors.primary,
+    paddingVertical: spacing.md,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  fixedButtonText: {
+    color: colors.white,
+    fontWeight: '600',
+    fontSize: 16,
+  },
 });
