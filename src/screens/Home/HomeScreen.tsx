@@ -1,5 +1,5 @@
 import { View, Text, FlatList, TouchableOpacity } from 'react-native';
-import React from 'react';
+import React, { useEffect } from 'react';
 import IngredientCard from '../../components/IngredientCard';
 import { useIngredientStore } from '../../store/ingredientStore';
 import { useUserStore } from '../../store/userStore';
@@ -8,6 +8,13 @@ import { styles } from './Home.styles';
 export default function HomeScreen({ navigation }: any) {
   const ingredients = useIngredientStore((state) => state.ingredients);
   const currentUser = useUserStore((state) => state.currentUser);
+  const loadIngredients = useIngredientStore((state) => state.fetchIngredients);
+
+  useEffect(() => {
+  if (currentUser) {
+    loadIngredients();
+  }
+}, [currentUser]);
 
   const handleAddIngredient = () => {
     navigation.navigate('AddIngredient');
@@ -33,13 +40,17 @@ export default function HomeScreen({ navigation }: any) {
     return (
       <FlatList
         data={ingredients}
-        horizontal
         keyExtractor={(item) => item.id}
-        showsHorizontalScrollIndicator={false}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}
         renderItem={({ item }) => (
           <IngredientCard
             ingredient={item}
-            onPress={() => console.log('Pressed', item.name)}
+            onPress={() =>
+                navigation.navigate('IngredientDetails', {
+                ingredientId: item.id,
+              })
+            }
           />
         )}
       />
@@ -53,9 +64,14 @@ export default function HomeScreen({ navigation }: any) {
         {renderContent()}
       </View>
 
-      <TouchableOpacity style={styles.fixedButton} onPress={handleAddIngredient}>
-        <Text style={styles.fixedButtonText}>Add Ingredient</Text>
-      </TouchableOpacity>
+      {currentUser && (
+        <TouchableOpacity
+          style={styles.fixedButton}
+          onPress={handleAddIngredient}
+        >
+          <Text style={styles.fixedButtonText}>Add Ingredient</Text>
+        </TouchableOpacity>
+    )}
     </View>
   );
 }

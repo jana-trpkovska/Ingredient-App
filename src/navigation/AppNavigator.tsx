@@ -14,6 +14,7 @@ import { colors } from '../themes/colors';
 import { spacing } from '../themes/spacing';
 import EditProfileScreen from '../screens/EditProfile/EditProfileScreen';
 import AddIngredientScreen from '../screens/AddIngredient/AddIngredientScreen';
+import IngredientDetailsScreen from '../screens/IngredientDetails/IngredientDetailsScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -44,6 +45,10 @@ export default function AppNavigator() {
         <Stack.Screen 
           name="AddIngredient" 
           component={AddIngredientScreen} 
+        />
+        <Stack.Screen 
+          name="IngredientDetails" 
+          component={IngredientDetailsScreen} 
         />
 
         <Stack.Screen 
