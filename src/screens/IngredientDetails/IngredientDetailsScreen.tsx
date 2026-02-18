@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useIngredientStore } from '../../store/ingredientStore';
 import { styles } from './IngredientDetails.styles';
+import placeholderImage from '../../assets/placeholder_ingredient.png'
 
 export default function IngredientDetailsScreen() {
   const route = useRoute<any>();
@@ -30,11 +31,7 @@ export default function IngredientDetailsScreen() {
     <View style={styles.container}>
         <View style={styles.content}>
         <View style={styles.imageContainer}>
-            {image ? (
-            <Image source={{ uri: image }} style={styles.image} />
-            ) : (
-            <View style={styles.imagePlaceholder} />
-            )}
+            <Image source={image ? {uri: image} : placeholderImage} style={styles.image} />
         </View>
 
         <View style={styles.infoCard}>

@@ -5,6 +5,7 @@ import { colors } from '../themes/colors';
 import { spacing } from '../themes/spacing';
 import { useIngredientStore } from '../store/ingredientStore';
 import deleteImage from '../assets/delete.png'
+import placeholderImage from '../assets/placeholder_ingredient.png'
 
 interface Props {
   ingredient: Ingredient;
@@ -58,9 +59,7 @@ const IngredientCard = ({ ingredient, onPress }: Props) => {
           marginRight: spacing.md,
         }}
       >
-        {image ? (
-          <Image source={{ uri: image }} style={{ width: 60, height: 60 }} />
-        ) : null}
+        <Image source={image ? { uri: image } : placeholderImage} style={{ width: 60, height: 60 }} />
       </View>
 
       <View style={{ flex: 1 }}>

@@ -26,8 +26,8 @@ export const styles = StyleSheet.create({
     height: '100%',
   },
   imagePlaceholder: {
-    flex: 1,
-    backgroundColor: colors.secondaryBackground,
+    width: '100%',
+    height: '100%',
   },
   infoCard: {
     marginTop: -30,
