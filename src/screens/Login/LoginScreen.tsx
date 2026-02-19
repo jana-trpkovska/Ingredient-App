@@ -28,7 +28,7 @@ export default function LoginScreen({ navigation }: any) {
       return;
     }
     setCurrentUser(user);
-    navigation.navigate('MainTabs');
+    navigation.goBack();
   };
 
   return (

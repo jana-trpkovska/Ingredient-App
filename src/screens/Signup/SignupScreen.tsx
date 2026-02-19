@@ -39,7 +39,7 @@ export default function SignupScreen({ navigation }: any) {
     try {
       addUser(newUser);
       setCurrentUser(newUser);
-      navigation.navigate('MainTabs');
+      navigation.goBack();
     } catch (error) {
       Alert.alert('Error', 'Username already exists or invalid input');
     }
