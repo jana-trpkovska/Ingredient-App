@@ -41,3 +41,6 @@ yarn-error.*
 # editor folders
 .vscode/
 .idea/
+
+# Environment variables
+.env
