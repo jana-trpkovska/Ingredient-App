@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-} from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native';
 import IngredientCard from '../../components/IngredientCard';
 import { useIngredientStore } from '../../store/ingredientStore';
 import { useUserStore } from '../../store/userStore';
@@ -24,17 +17,10 @@ const CATEGORY_FILTERS = [
 
 export default function HomeScreen({ navigation }: any) {
   const ingredients = useIngredientStore((state) => state.ingredients);
-  const loadIngredients = useIngredientStore((state) => state.fetchIngredients);
   const currentUser = useUserStore((state) => state.currentUser);
 
   const [selectedCategory, setSelectedCategory] =
     useState<IngredientCategory | null>(null);
-
-  useEffect(() => {
-    if (currentUser) {
-      loadIngredients();
-    }
-  }, [currentUser]);
 
   const handleAddIngredient = () => {
     navigation.navigate('AddIngredient');

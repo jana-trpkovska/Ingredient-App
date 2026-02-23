@@ -16,7 +16,7 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
   },
   categoryContainer: {
-    paddingBottom: spacing.md,
+    paddingBottom: spacing.xl,
   },
   categoryItem: {
     alignItems: 'center',

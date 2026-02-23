@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useIngredientStore } from '../../store/ingredientStore';
 import { useRecipeStore } from '../../store/recipeStore';
 import { IngredientSearchRecipe } from '../../types/recipe';
 import { styles } from './AddRecipe.styles';
 import { Ionicons } from '@expo/vector-icons';
+import { colors } from '../../themes/colors';
 
 export default function AddRecipeScreen({ navigation }: any) {
   const { ingredients } = useIngredientStore();
-  const { searchRecipes, searchResults, saveRecipe, isRecipeSaved } = useRecipeStore();
+  const { searchRecipes, searchResults, saveRecipe, isRecipeSaved, removeRecipe } = useRecipeStore();
 
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
 
@@ -60,12 +61,18 @@ export default function AddRecipeScreen({ navigation }: any) {
           </Text>
           <TouchableOpacity
             style={[styles.saveButton, saved && styles.saveButtonSaved]}
-            onPress={() => saveRecipe(item)}
+            onPress={() => {
+              if (saved) {
+                removeRecipe(item.id);
+              } else {
+                saveRecipe(item.id);
+              }
+            }}
           >
             <Ionicons
               name={saved ? 'heart' : 'heart-outline'}
               size={20}
-              color={saved ? '#ff6b81' : '#666'}
+              color={saved ? colors.heart : colors.textSecondary}
             />
             <Text style={styles.saveButtonText}>{saved ? 'Saved' : 'Save'}</Text>
           </TouchableOpacity>

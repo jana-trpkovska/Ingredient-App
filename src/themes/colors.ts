@@ -9,6 +9,7 @@ export const colors = {
   white: '#fff',
   black: '#000',
   green: '#4CAF50',
+  heart: '#ff6b81',
   headerBackground: "#ffe1a2",
   cardBackground: '#f5f5f5',
   secondaryBackground: '#ddd'

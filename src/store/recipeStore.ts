@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { IngredientSearchRecipe, DetailedRecipe } from '../types/recipe';
+import { IngredientSearchRecipe, DetailedRecipe, SavedRecipe } from '../types/recipe';
 import { useUserStore } from './userStore';
 import {
   addUserRecipe,
@@ -12,11 +12,11 @@ import {
 } from '../services/recipeApiService';
 
 interface RecipeStore {
-  savedRecipes: IngredientSearchRecipe[];
+  savedRecipes: SavedRecipe[];
   searchResults: IngredientSearchRecipe[];
   fetchSavedRecipes: () => void;
   searchRecipes: (ingredients: string[], diet?: string) => Promise<void>;
-  saveRecipe: (recipe: IngredientSearchRecipe) => void;
+  saveRecipe: (recipeId: number) => Promise<void>;
   removeRecipe: (recipeId: number) => void;
   isRecipeSaved: (recipeId: number) => boolean;
   getRecipeDetailsById: (id: number) => Promise<DetailedRecipe | null>;
@@ -44,11 +44,23 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
     }
   },
 
-  saveRecipe: (recipe) => {
+  saveRecipe: async (recipeId: number) => {
     const user = useUserStore.getState().currentUser;
     if (!user) return;
 
-    addUserRecipe(user.id, recipe);
+    const detailed = await getRecipeDetails(recipeId);
+    if (!detailed) return;
+
+    const recipeToSave: SavedRecipe = {
+      id: detailed.id,
+      title: detailed.title,
+      image: detailed.image,
+      extendedIngredients: detailed.extendedIngredients,
+      readyInMinutes: detailed.readyInMinutes,
+      servings: detailed.servings,
+    };
+
+    addUserRecipe(user.id, recipeToSave);
     get().fetchSavedRecipes();
   },
 
