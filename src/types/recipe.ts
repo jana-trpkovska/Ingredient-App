@@ -23,6 +23,12 @@ export type DetailedRecipe = {
   readyInMinutes: number;
   summary: string;
   instructions: string;
+  analyzedInstructions: {
+    steps: {
+      number: number;
+      step: string;
+    }[];
+  }[];
   extendedIngredients: IngredientAmount[];
 };
 

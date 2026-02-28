@@ -69,6 +69,9 @@ export const getRecipeDetails = async (id: number): Promise<DetailedRecipe | nul
       readyInMinutes: data.readyInMinutes ?? 0,
       summary: data.summary ?? "",
       instructions: data.instructions ?? "",
+      analyzedInstructions: Array.isArray(data.analyzedInstructions)
+        ? data.analyzedInstructions
+        : [],
       extendedIngredients: Array.isArray(data.extendedIngredients)
         ? data.extendedIngredients.map(mapIngredient)
         : [],

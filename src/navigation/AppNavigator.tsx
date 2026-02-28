@@ -15,6 +15,7 @@ import { spacing } from '../themes/spacing';
 import EditProfileScreen from '../screens/EditProfile/EditProfileScreen';
 import AddIngredientScreen from '../screens/AddIngredient/AddIngredientScreen';
 import IngredientDetailsScreen from '../screens/IngredientDetails/IngredientDetailsScreen';
+import DetailedRecipeScreen from '../screens/DetailedRecipe/DetailedRecipeScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -49,6 +50,10 @@ export default function AppNavigator() {
         <Stack.Screen 
           name="IngredientDetails" 
           component={IngredientDetailsScreen} 
+        />
+        <Stack.Screen 
+          name="DetailedRecipe" 
+          component={DetailedRecipeScreen} 
         />
 
         <Stack.Screen 
