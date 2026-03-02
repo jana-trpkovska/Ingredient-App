@@ -147,7 +147,7 @@ export default function AddIngredientScreen() {
               <TextInput
                 value={name}
                 onChangeText={setName}
-                placeholder="e.g., Tomato"
+                placeholder="e.g., Tomatoes"
                 placeholderTextColor={colors.textSecondary}
                 style={styles.input}
               />

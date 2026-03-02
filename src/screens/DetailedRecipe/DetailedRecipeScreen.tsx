@@ -1,23 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import { View, Text, ScrollView, Image, ActivityIndicator } from 'react-native';
 import { useRoute } from '@react-navigation/native';
 import { useRecipeStore } from '../../store/recipeStore';
+import { useIngredientStore } from '../../store/ingredientStore';
 import { DetailedRecipe } from '../../types/recipe';
 import { styles } from './DetailedRecipe.styles';
 import { colors } from '../../themes/colors';
-import timerIcon from '../../assets/timer.png'
-import servingsIcon from '../../assets/servings.png'
+import timerIcon from '../../assets/timer.png';
+import servingsIcon from '../../assets/servings.png';
+import missingIcon from '../../assets/missing.png';
+import { isIngredientMissing } from '../../utils/pantry';
 
 export default function DetailedRecipeScreen() {
   const route = useRoute<any>();
   const { recipeId } = route.params;
 
-  const getRecipeDetailsById = useRecipeStore(
-    (state) => state.getRecipeDetailsById
-  );
+  const getRecipeDetailsById = useRecipeStore((state) => state.getRecipeDetailsById);
+  const userIngredients = useIngredientStore((state) => state.ingredients);
 
   const [recipe, setRecipe] = useState<DetailedRecipe | null>(null);
   const [loading, setLoading] = useState(true);
+
+  const userPantryNames = useMemo(
+    () => userIngredients.map((i) => i.name?.toLowerCase().trim()),
+    [userIngredients]
+  );
 
   useEffect(() => {
     const loadRecipe = async () => {
@@ -26,7 +33,6 @@ export default function DetailedRecipeScreen() {
       setRecipe(data);
       setLoading(false);
     };
-
     loadRecipe();
   }, [recipeId]);
 
@@ -46,14 +52,9 @@ export default function DetailedRecipeScreen() {
     );
   }
 
-  const structuredSteps =
-    recipe.analyzedInstructions?.[0]?.steps ?? [];
-
-  const cleanedSummary =
-    recipe.summary?.replace(/<[^>]+>/g, '') ?? '';
-
-  const cleanedHtmlInstructions =
-    recipe.instructions?.replace(/<[^>]+>/g, '') ?? '';
+  const structuredSteps = recipe.analyzedInstructions?.[0]?.steps ?? [];
+  const cleanedSummary = recipe.summary?.replace(/<[^>]+>/g, '') ?? '';
+  const cleanedHtmlInstructions = recipe.instructions?.replace(/<[^>]+>/g, '') ?? '';
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -68,65 +69,58 @@ export default function DetailedRecipeScreen() {
           <View style={styles.heroInfoRow}>
             <View style={styles.heroInfoItem}>
               <Image source={timerIcon} style={styles.heroInfoIcon} />
-              <Text style={styles.heroInfoText}>
-                {recipe.readyInMinutes} mins
-              </Text>
+              <Text style={styles.heroInfoText}>{recipe.readyInMinutes} mins</Text>
             </View>
 
             <View style={styles.heroInfoItem}>
               <Image source={servingsIcon} style={styles.heroInfoIcon} />
-              <Text style={styles.heroInfoText}>
-                {recipe.servings} servings
-              </Text>
+              <Text style={styles.heroInfoText}>{recipe.servings} servings</Text>
             </View>
           </View>
         </View>
       </View>
 
       <View style={styles.contentCard}>
-
         {cleanedSummary.length > 0 && (
           <>
             <Text style={styles.sectionTitle}>About</Text>
-            <Text style={styles.summaryText}>
-              {cleanedSummary}
-            </Text>
+            <Text style={styles.summaryText}>{cleanedSummary}</Text>
           </>
         )}
 
         <Text style={styles.sectionTitle}>Ingredients</Text>
-        {recipe.extendedIngredients?.map((ing) => (
-          <View key={ing.id} style={styles.ingredientRow}>
-            <View style={styles.bullet} />
-            <Text style={styles.ingredientText}>
-              {ing.amount} {ing.unit} {ing.name}
-            </Text>
-          </View>
-        ))}
+        {recipe.extendedIngredients?.map((ing) => {
+          const missing = isIngredientMissing(ing.name, userPantryNames);
+          return (
+            <View key={ing.id} style={styles.ingredientRow}>
+              <View style={styles.bullet} />
+              <Text style={styles.ingredientText}>
+                {ing.amount} {ing.unit} {ing.name}
+              </Text>
+              {missing && (
+                <Image
+                  source={missingIcon}
+                  style={{ width: 18, height: 18, marginLeft: 8 }}
+                />
+              )}
+            </View>
+          );
+        })}
 
         <Text style={styles.sectionTitle}>Instructions</Text>
-
         {structuredSteps.length > 0 ? (
           structuredSteps.map((step) => (
             <View key={step.number} style={styles.stepRow}>
               <View style={styles.stepBadge}>
-                <Text style={styles.stepBadgeText}>
-                  {step.number}
-                </Text>
+                <Text style={styles.stepBadgeText}>{step.number}</Text>
               </View>
-              <Text style={styles.stepText}>
-                {step.step}
-              </Text>
+              <Text style={styles.stepText}>{step.step}</Text>
             </View>
           ))
         ) : cleanedHtmlInstructions ? (
-          <Text style={styles.stepText}>
-            {cleanedHtmlInstructions}
-          </Text>
+          <Text style={styles.stepText}>{cleanedHtmlInstructions}</Text>
         ) : (
-          <Text style={styles.noInstructions}>
-            No instructions available.
-          </Text>
+          <Text style={styles.noInstructions}>No instructions available.</Text>
         )}
       </View>
     </ScrollView>

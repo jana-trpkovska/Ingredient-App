@@ -5,84 +5,79 @@ import { useIngredientStore } from '../../store/ingredientStore';
 import { useRecipeStore } from '../../store/recipeStore';
 import { styles } from './Cook.styles';
 import { colors } from '../../themes/colors';
+import deleteIcon from '../../assets/delete.png';
+import { isIngredientMissing } from '../../utils/pantry';
 
 export default function CookScreen() {
   const navigation = useNavigation<any>();
   const ingredients = useIngredientStore((state) => state.ingredients);
   const savedRecipes = useRecipeStore((state) => state.savedRecipes);
+  const removeRecipe = useRecipeStore((state) => state.removeRecipe);
+
+  const userPantryNames = useMemo(
+    () => ingredients.map((i) => i.name?.toLowerCase().trim()),
+    [ingredients]
+  );
 
   const isCookable = (recipe: any) => {
-    if (
-      !recipe ||
-      !Array.isArray(recipe.extendedIngredients) ||
-      recipe.extendedIngredients.length === 0
-    ) {
-      return false;
-    }
+    if (!recipe || !Array.isArray(recipe.extendedIngredients)) return false;
 
-    const pantryNames = ingredients.map((i) =>
-      i.name?.toLowerCase().trim()
+    const missingIngredients = recipe.extendedIngredients.filter(
+      (ing: any) => isIngredientMissing(ing.name, userPantryNames)
     );
 
-    return recipe.extendedIngredients.every((ingredient: any) => {
-      if (!ingredient || !ingredient.name) return false;
-
-      return pantryNames.some((p) =>
-        p?.includes(ingredient.name.toLowerCase().trim())
-      );
-    });
+    return missingIngredients.length === 0;
   };
 
   const sortedRecipes = useMemo(() => {
     if (!Array.isArray(savedRecipes)) return [];
 
     const validRecipes = savedRecipes.filter(Boolean);
-
     const cookable = validRecipes.filter((r) => isCookable(r));
     const notCookable = validRecipes.filter((r) => !isCookable(r));
 
+    cookable.sort((a, b) => a.title.localeCompare(b.title));
+    notCookable.sort((a, b) => a.title.localeCompare(b.title));
+
     return [...cookable, ...notCookable];
-  }, [savedRecipes, ingredients]);
+  }, [savedRecipes, userPantryNames]);
 
   const renderRecipe = ({ item }: any) => {
     const cookable = isCookable(item);
 
     return (
       <TouchableOpacity
-        style={[
-          styles.recipeCard,
-          !cookable && styles.recipeCardDisabled,
-        ]}
+        style={[styles.recipeCard, !cookable && styles.recipeCardDisabled]}
         onPress={() =>
-          navigation.navigate('DetailedRecipe', {
-            recipeId: item.id,
-          })
+          navigation.navigate('DetailedRecipe', { recipeId: item.id })
         }
       >
         {item.image && (
           <Image
             source={{ uri: item.image }}
-            style={[
-              styles.recipeImage,
-              !cookable && { opacity: 0.4 },
-            ]}
+            style={[styles.recipeImage, !cookable && { opacity: 0.4 }]}
           />
         )}
 
         <View style={styles.recipeInfo}>
-          <Text
-            style={[
-              styles.recipeTitle,
-              !cookable && { color: colors.textSecondary },
-            ]}
-          >
-            {item.title}
-          </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flex: 1, marginRight: 8 }}>
+              <Text
+                style={[styles.recipeTitle, !cookable && { color: colors.textSecondary }]}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
+                {item.title}
+              </Text>
+            </View>
+
+            <TouchableOpacity onPress={() => removeRecipe(item.id)}>
+              <Image source={deleteIcon} style={{ width: 20, height: 20 }} />
+            </TouchableOpacity>
+          </View>
 
           {!cookable && (
-            <Text style={styles.missingText}>
-              Missing ingredients
-            </Text>
+            <Text style={styles.missingText}>Missing ingredients</Text>
           )}
         </View>
       </TouchableOpacity>
@@ -109,7 +104,9 @@ export default function CookScreen() {
 
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate('MainTabs', { screen: 'Add Recipe' })}
+        onPress={() =>
+          navigation.navigate('MainTabs', { screen: 'Add Recipe' })
+        }
       >
         <Text style={styles.addButtonText}>Add New Recipe</Text>
       </TouchableOpacity>

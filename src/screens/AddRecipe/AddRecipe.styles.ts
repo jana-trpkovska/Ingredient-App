@@ -109,4 +109,10 @@ export const styles = StyleSheet.create({
     color: colors.textSecondary,
     marginVertical: spacing.md,
   },
+  noIngredientsText: {
+    color: colors.textSecondary,
+    fontSize: 14,
+    marginTop: 5,
+    textAlign: 'center',
+  },
 });

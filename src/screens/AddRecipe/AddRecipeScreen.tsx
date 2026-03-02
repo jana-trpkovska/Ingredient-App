@@ -14,15 +14,27 @@ export default function AddRecipeScreen({ navigation }: any) {
   const { currentUser } = useUserStore();
 
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
+  const [showNoIngredientsMessage, setShowNoIngredientsMessage] = useState(false);
 
   const toggleIngredient = (name: string) => {
     setSelectedIngredients((prev) =>
-      prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name]
+      prev.includes(name)
+        ? prev.filter((i) => i !== name)
+        : [...prev, name]
     );
+
+    if (selectedIngredients.length === 0) {
+      setShowNoIngredientsMessage(false);
+    }
   };
 
   const handleSearch = () => {
-    if (selectedIngredients.length === 0) return;
+    if (selectedIngredients.length === 0) {
+      setShowNoIngredientsMessage(true);
+      return;
+    }
+
+    setShowNoIngredientsMessage(false);
 
     if (currentUser?.diet?.trim()) {
       searchRecipes(selectedIngredients, true);
@@ -97,9 +109,7 @@ export default function AddRecipeScreen({ navigation }: any) {
           nestedScrollEnabled
         >
           {ingredients.map((item) => (
-            <View key={item.id}>
-              {renderIngredient({ item })}
-            </View>
+            <View key={item.id}>{renderIngredient({ item })}</View>
           ))}
         </ScrollView>
       </View>
@@ -114,15 +124,19 @@ export default function AddRecipeScreen({ navigation }: any) {
         <Text style={styles.searchButtonText}>Search Recipes</Text>
       </TouchableOpacity>
 
+      {showNoIngredientsMessage && (
+        <Text style={styles.noIngredientsText}>
+          Please select at least one ingredient to search recipes.
+        </Text>
+      )}
+
       <Text style={styles.sectionTitle}>Results</Text>
       {searchResults.length === 0 ? (
         <Text style={styles.emptyText}>No recipes found. Try searching!</Text>
       ) : (
         <View style={styles.recipeList}>
           {searchResults.map((item) => (
-            <View key={item.id}>
-              {renderRecipe({ item })}
-            </View>
+            <View key={item.id}>{renderRecipe({ item })}</View>
           ))}
         </View>
       )}
