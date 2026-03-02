@@ -14,8 +14,6 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
 
-  /* HERO */
-
   heroContainer: {
     height: 340,
     position: 'relative',
@@ -63,8 +61,8 @@ heroInfoItem: {
 },
 
 heroInfoIcon: {
-  width: 20,
-  height: 20,
+  width: 25,
+  height: 25,
   marginRight: 6,
   resizeMode: 'contain',
 },
@@ -75,87 +73,82 @@ heroInfoText: {
   fontWeight: '600',
 },
 
-  /* CONTENT CARD */
+contentCard: {
+  backgroundColor: '#fff',
+  marginTop: -30,
+  borderTopLeftRadius: 28,
+  borderTopRightRadius: 28,
+  padding: 24,
+  paddingBottom: 50,
+},
 
-  contentCard: {
-    backgroundColor: '#fff',
-    marginTop: -30,
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
-    padding: 24,
-    paddingBottom: 50,
-  },
+sectionTitle: {
+  fontSize: 19,
+  fontWeight: '700',
+  marginTop: 24,
+  marginBottom: 14,
+  color: colors.textPrimary,
+},
 
-  sectionTitle: {
-    fontSize: 19,
-    fontWeight: '700',
-    marginTop: 24,
-    marginBottom: 14,
-    color: colors.textPrimary,
-  },
+summaryText: {
+  fontSize: 15,
+  lineHeight: 24,
+  color: colors.textPrimary,
+  textAlign: 'justify'
+},
 
-  summaryText: {
-    fontSize: 15,
-    lineHeight: 24,
-    color: colors.textPrimary,
-    textAlign: 'justify'
-  },
+ingredientRow: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  marginBottom: 10,
+},
 
-  /* INGREDIENTS */
+bullet: {
+  width: 9,
+  height: 9,
+  borderRadius: 4.5,
+  backgroundColor: colors.primary,
+  marginRight: 12,
+},
 
-  ingredientRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
-  },
+ingredientText: {
+  fontSize: 15,
+  color: colors.textPrimary,
+},
 
-  bullet: {
-    width: 9,
-    height: 9,
-    borderRadius: 4.5,
-    backgroundColor: colors.primary,
-    marginRight: 12,
-  },
+stepRow: {
+  flexDirection: 'row',
+  alignItems: 'flex-start',
+  marginBottom: 20,
+},
 
-  ingredientText: {
-    fontSize: 15,
-    color: colors.textPrimary,
-  },
+stepBadge: {
+  width: 34,
+  height: 34,
+  borderRadius: 17,
+  backgroundColor: colors.primary,
+  justifyContent: 'center',
+  alignItems: 'center',
+  marginRight: 14,
+},
 
-  /* STEPS */
+stepBadgeText: {
+  color: '#fff',
+  fontWeight: 'bold',
+  fontSize: 14,
+},
 
-  stepRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 20,
-  },
+stepText: {
+  flex: 1,
+  fontSize: 15,
+  lineHeight: 24,
+  color: colors.textPrimary,
+  textAlign: 'justify',
+},
 
-  stepBadge: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: colors.primary,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 14,
-  },
-
-  stepBadgeText: {
-    color: '#fff',
-    fontWeight: 'bold',
-    fontSize: 14,
-  },
-
-  stepText: {
-    flex: 1,
-    fontSize: 15,
-    lineHeight: 24,
-    color: colors.textPrimary,
-  },
-
-  noInstructions: {
-    fontSize: 15,
-    fontStyle: 'italic',
-    color: colors.textSecondary,
-  },
+noInstructions: {
+  fontSize: 15,
+  fontStyle: 'italic',
+  color: colors.textSecondary,
+},
 });

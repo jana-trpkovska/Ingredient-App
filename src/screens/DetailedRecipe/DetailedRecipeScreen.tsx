@@ -58,7 +58,6 @@ export default function DetailedRecipeScreen() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       
-      {/* HERO IMAGE */}
       <View style={styles.heroContainer}>
         <Image source={{ uri: recipe.image }} style={styles.heroImage} />
         <View style={styles.heroOverlay} />
@@ -84,10 +83,8 @@ export default function DetailedRecipeScreen() {
         </View>
       </View>
 
-      {/* CONTENT CARD */}
       <View style={styles.contentCard}>
 
-        {/* SUMMARY */}
         {cleanedSummary.length > 0 && (
           <>
             <Text style={styles.sectionTitle}>About</Text>
@@ -97,7 +94,6 @@ export default function DetailedRecipeScreen() {
           </>
         )}
 
-        {/* INGREDIENTS */}
         <Text style={styles.sectionTitle}>Ingredients</Text>
         {recipe.extendedIngredients?.map((ing) => (
           <View key={ing.id} style={styles.ingredientRow}>
@@ -108,7 +104,6 @@ export default function DetailedRecipeScreen() {
           </View>
         ))}
 
-        {/* INSTRUCTIONS */}
         <Text style={styles.sectionTitle}>Instructions</Text>
 
         {structuredSteps.length > 0 ? (

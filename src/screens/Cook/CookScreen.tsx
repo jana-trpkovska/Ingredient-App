@@ -109,7 +109,7 @@ export default function CookScreen() {
 
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate('MainTabs', { screen: 'AddRecipe' })}
+        onPress={() => navigation.navigate('MainTabs', { screen: 'Add Recipe' })}
       >
         <Text style={styles.addButtonText}>Add New Recipe</Text>
       </TouchableOpacity>

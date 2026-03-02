@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
 import { useIngredientStore } from '../../store/ingredientStore';
 import { useRecipeStore } from '../../store/recipeStore';
+import { useUserStore } from '../../store/userStore';
 import { IngredientSearchRecipe } from '../../types/recipe';
 import { styles } from './AddRecipe.styles';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +11,7 @@ import { colors } from '../../themes/colors';
 export default function AddRecipeScreen({ navigation }: any) {
   const { ingredients } = useIngredientStore();
   const { searchRecipes, searchResults, saveRecipe, isRecipeSaved, removeRecipe } = useRecipeStore();
+  const { currentUser } = useUserStore();
 
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
 
@@ -21,7 +23,12 @@ export default function AddRecipeScreen({ navigation }: any) {
 
   const handleSearch = () => {
     if (selectedIngredients.length === 0) return;
-    searchRecipes(selectedIngredients);
+
+    if (currentUser?.diet?.trim()) {
+      searchRecipes(selectedIngredients, true);
+    } else {
+      searchRecipes(selectedIngredients);
+    }
   };
 
   const renderIngredient = ({ item }: any) => {
@@ -62,11 +69,8 @@ export default function AddRecipeScreen({ navigation }: any) {
           <TouchableOpacity
             style={[styles.saveButton, saved && styles.saveButtonSaved]}
             onPress={() => {
-              if (saved) {
-                removeRecipe(item.id);
-              } else {
-                saveRecipe(item.id);
-              }
+              if (saved) removeRecipe(item.id);
+              else saveRecipe(item.id);
             }}
           >
             <Ionicons
@@ -87,18 +91,24 @@ export default function AddRecipeScreen({ navigation }: any) {
 
       <View style={styles.ingredientListContainer}>
         <ScrollView
-        style={{ flexGrow: 0 }}
-        contentContainerStyle={styles.ingredientOptionList}
-        showsVerticalScrollIndicator
-        nestedScrollEnabled
+          style={{ flexGrow: 0 }}
+          contentContainerStyle={styles.ingredientOptionList}
+          showsVerticalScrollIndicator
+          nestedScrollEnabled
         >
-        {ingredients.map((item) => (
+          {ingredients.map((item) => (
             <View key={item.id}>
-            {renderIngredient({ item })}
+              {renderIngredient({ item })}
             </View>
-         ))}
+          ))}
         </ScrollView>
       </View>
+
+      {currentUser?.diet && (
+        <Text style={{ marginVertical: 8, color: colors.textSecondary }}>
+          Diet applied: {currentUser.diet}
+        </Text>
+      )}
 
       <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
         <Text style={styles.searchButtonText}>Search Recipes</Text>

@@ -8,7 +8,6 @@ export const styles = StyleSheet.create({
     padding: spacing.lg,
     backgroundColor: colors.background,
     alignItems: 'center',
-    justifyContent: 'center'
   },
   centered: {
     flex: 1,
@@ -23,14 +22,14 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: spacing.lg,
+    fontWeight: '600',
     color: colors.textPrimary,
+    alignSelf: 'flex-start',
   },
   avatar: {
     width: 100,
     height: 100,
-    marginBottom: spacing.md,
+    marginVertical: spacing.md,
   },
   label: {
     fontSize: 16,
@@ -45,7 +44,7 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
-    marginBottom: spacing.lg,
+    width: '100%',
   },
   input: {
     flex: 1,
@@ -54,12 +53,11 @@ export const styles = StyleSheet.create({
     color: colors.textPrimary,
   },
   primaryButton: {
+    width: '100%',
     backgroundColor: colors.primary,
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.lg,
     borderRadius: 6,
-    marginTop: spacing.lg,
-    width: '100%',
     alignItems: 'center',
   },
   primaryButtonText: {

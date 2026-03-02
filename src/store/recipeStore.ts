@@ -8,6 +8,7 @@ import {
 } from '../services/recipeLocalService';
 import {
   searchRecipesByIngredients,
+  searchRecipesComplex,
   getRecipeDetails,
 } from '../services/recipeApiService';
 
@@ -15,7 +16,7 @@ interface RecipeStore {
   savedRecipes: SavedRecipe[];
   searchResults: IngredientSearchRecipe[];
   fetchSavedRecipes: () => void;
-  searchRecipes: (ingredients: string[], diet?: string) => Promise<void>;
+  searchRecipes: (ingredients: string[], useComplex?: boolean) => Promise<void>;
   saveRecipe: (recipeId: number) => Promise<void>;
   removeRecipe: (recipeId: number) => void;
   isRecipeSaved: (recipeId: number) => boolean;
@@ -34,9 +35,17 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
     set({ savedRecipes: recipes });
   },
 
-  searchRecipes: async (ingredients: string[], diet?: string) => {
+  searchRecipes: async (ingredients: string[], useComplex = true) => {
+    const user = useUserStore.getState().currentUser;
+    const diet = user?.diet || undefined;
+
     try {
-      const results = await searchRecipesByIngredients(ingredients, diet);
+      let results: IngredientSearchRecipe[] = [];
+      if (useComplex) {
+        results = await searchRecipesComplex(ingredients, diet);
+      } else {
+        results = await searchRecipesByIngredients(ingredients);
+      }
       set({ searchResults: results });
     } catch (error) {
       console.error('Error searching recipes:', error);

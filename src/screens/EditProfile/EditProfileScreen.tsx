@@ -5,23 +5,26 @@ import { updateUser } from '../../services/userService';
 import { styles } from './EditProfile.styles';
 import userIcon from '../../assets/avatar.png';
 import { colors } from '../../themes/colors';
+import { Picker } from '@react-native-picker/picker';
+import { Diet } from '../../types/diet';
 
 export default function EditProfileScreen({ navigation }: any) {
   const { currentUser, setCurrentUser } = useUserStore();
   const [fullName, setFullName] = useState('');
-  const [diet, setDiet] = useState('');
+  const [diet, setDiet] = useState<Diet | null>(null);
 
   useEffect(() => {
     if (!currentUser) {
       navigation.replace('Login');
       return;
     }
+
     setFullName(currentUser.fullName);
-    setDiet(currentUser.diet ?? '');
+    setDiet(currentUser.diet ?? null);
   }, [currentUser]);
 
   const handleSave = () => {
-    if (!fullName) {
+    if (!fullName.trim()) {
       Alert.alert('Error', 'Full name cannot be empty');
       return;
     }
@@ -30,8 +33,8 @@ export default function EditProfileScreen({ navigation }: any) {
 
     const updatedUser = {
       ...currentUser,
-      fullName,
-      diet,
+      fullName: fullName.trim(),
+      diet: diet ?? undefined,
     };
 
     try {
@@ -53,48 +56,54 @@ export default function EditProfileScreen({ navigation }: any) {
   }
 
   return (
-  <KeyboardAvoidingView
-    style={{ flex: 1 }}
-    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-    keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
-  >
-    <ScrollView
-      contentContainerStyle={{ flexGrow: 1 }}
-      keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
+    <KeyboardAvoidingView
+      style={{ flex: 1 }}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
     >
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.container}>
-      <Text style={styles.title}>Edit Profile</Text>
+          <Text style={styles.title}>Edit Profile</Text>
 
-      <Image source={userIcon} style={styles.avatar} />
+          <Image source={userIcon} style={styles.avatar} />
 
-      <Text style={styles.label}>Full Name</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-        value={fullName}
-        onChangeText={setFullName}
-        placeholder="Full Name"
-        placeholderTextColor={colors.textSecondary}
-        style={styles.input}
-      />
-      </View>
+          <Text style={styles.label}>Full Name</Text>
+          <View style={styles.inputContainer}>
+            <TextInput
+              value={fullName}
+              onChangeText={setFullName}
+              placeholder="Full Name"
+              placeholderTextColor={colors.textSecondary}
+              style={styles.input}
+            />
+          </View>
 
-      <Text style={styles.label}>Diet</Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-        value={diet}
-        onChangeText={setDiet}
-        placeholder="Diet (optional)"
-        placeholderTextColor={colors.textSecondary}
-        style={styles.input}
-      />
-      </View>
+          <Text style={styles.label}>Diet</Text>
+          <View style={styles.inputContainer}>
+            <Picker
+              selectedValue={diet}
+              onValueChange={(val) => setDiet(val)}
+              style={{ flex: 1, color: colors.textSecondary }}
+            >
+              <Picker.Item label="Select diet" value={null} />
+              {Object.values(Diet).map((d) => (
+                <Picker.Item key={d} label={d} value={d} />
+              ))}
+            </Picker>
+          </View>
 
-      <TouchableOpacity style={styles.primaryButton} onPress={handleSave}>
-        <Text style={styles.primaryButtonText}>Save</Text>
-      </TouchableOpacity>
-    </View>
-    </ScrollView>
-  </KeyboardAvoidingView>
+          <TouchableOpacity
+            style={[styles.primaryButton, { marginTop: 20 }]}
+            onPress={handleSave}
+          >
+            <Text style={styles.primaryButtonText}>Save</Text>
+          </TouchableOpacity>
+        </View>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

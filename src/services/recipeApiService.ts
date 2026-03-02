@@ -9,9 +9,7 @@ if (!API_KEY) {
 
 const api = axios.create({
   baseURL: "https://api.spoonacular.com",
-  params: {
-    apiKey: API_KEY,
-  },
+  params: { apiKey: API_KEY },
 });
 
 const mapIngredient = (ingredient: any): IngredientAmount => ({
@@ -55,10 +53,42 @@ export const searchRecipesByIngredients = async (
   }
 };
 
+export const searchRecipesComplex = async (
+  ingredients: string[],
+  diet?: string
+): Promise<IngredientSearchRecipe[]> => {
+  try {
+    const response = await api.get("/recipes/complexSearch", {
+      params: {
+        includeIngredients: ingredients.join(","),
+        diet: diet || undefined,
+        number: 20,
+        addRecipeInformation: true,
+      },
+    });
+
+    return response.data.results.map((r: any) => ({
+      id: r.id,
+      title: r.title,
+      image: r.image,
+      usedIngredientCount: r.usedIngredients?.length ?? 0,
+      missedIngredientCount: r.missedIngredients?.length ?? 0,
+      usedIngredients: Array.isArray(r.usedIngredients)
+        ? r.usedIngredients.map(mapIngredient)
+        : [],
+      missedIngredients: Array.isArray(r.missedIngredients)
+        ? r.missedIngredients.map(mapIngredient)
+        : [],
+    }));
+  } catch (error) {
+    console.error("Error fetching recipes from complex search:", error);
+    return [];
+  }
+};
+
 export const getRecipeDetails = async (id: number): Promise<DetailedRecipe | null> => {
   try {
     const response = await api.get(`/recipes/${id}/information`);
-
     const data = response.data;
 
     return {

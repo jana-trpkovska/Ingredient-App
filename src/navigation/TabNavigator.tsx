@@ -51,7 +51,7 @@ export default function TabNavigator() {
       />
 
       <Tab.Screen
-        name="AddRecipe"
+        name="Add Recipe"
         component={AddRecipeScreen}
         options={{
           tabBarIcon: ({ focused }) => (
