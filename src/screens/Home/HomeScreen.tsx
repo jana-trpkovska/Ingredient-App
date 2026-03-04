@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native';
 import IngredientCard from '../../components/IngredientCard';
 import { useIngredientStore } from '../../store/ingredientStore';
