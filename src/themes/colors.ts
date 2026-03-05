@@ -11,6 +11,7 @@ export const colors = {
   green: '#4CAF50',
   heart: '#ff6b81',
   headerBackground: "#ffe1a2",
-  cardBackground: '#f5f5f5',
-  secondaryBackground: '#ddd'
+  cardBackground: '#fbfbfb',
+  secondaryBackground: '#ddd',
+  settingsText: '#67676a',
 };

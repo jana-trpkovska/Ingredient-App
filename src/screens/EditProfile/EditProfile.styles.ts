@@ -3,63 +3,91 @@ import { colors } from '../../themes/colors';
 import { spacing } from '../../themes/spacing';
 
 export const styles = StyleSheet.create({
+
   container: {
     flex: 1,
-    padding: spacing.lg,
-    backgroundColor: colors.background,
+    backgroundColor: '#f2f2f2',
     alignItems: 'center',
   },
+
   centered: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: spacing.lg,
     backgroundColor: colors.background,
   },
+
   message: {
     fontSize: 16,
     color: colors.textSecondary,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: colors.textPrimary,
-    alignSelf: 'flex-start',
+
+  header: {
+    width: '100%',
+    height: 160,
+    backgroundColor: colors.headerBackground,
   },
+
   avatar: {
-    width: 100,
-    height: 100,
+    width: 110,
+    height: 110,
+    marginTop: -55,
+  },
+
+  title: {
+    fontSize: 22,
+    fontWeight: '700',
+    marginTop: spacing.md,
+    marginBottom: spacing.md,
+    color: colors.textPrimary,
+  },
+
+  card: {
+    width: '90%',
+    backgroundColor: 'white',
+    borderRadius: 16,
+    padding: spacing.lg,
+    marginBottom: spacing.lg,
+
+    shadowColor: '#000',
+    shadowOpacity: 0.08,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 3,
+  },
+
+  label: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.textSecondary,
+    marginBottom: 6,
+  },
+
+  input: {
+    fontSize: 16,
+    paddingVertical: spacing.sm,
+    color: colors.textPrimary,
+  },
+
+  divider: {
+    height: 1,
+    backgroundColor: '#eee',
     marginVertical: spacing.md,
   },
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: colors.textPrimary,
-    alignSelf: 'flex-start',
-    marginTop: spacing.md,
-    marginBottom: spacing.sm,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
+
+  picker: {
     width: '100%',
-  },
-  input: {
-    flex: 1,
-    paddingVertical: spacing.sm,
-    fontSize: 16,
     color: colors.textPrimary,
   },
+
   primaryButton: {
-    width: '100%',
+    width: '90%',
     backgroundColor: colors.primary,
     paddingVertical: spacing.md,
-    paddingHorizontal: spacing.lg,
-    borderRadius: 6,
+    borderRadius: 12,
     alignItems: 'center',
   },
+
   primaryButtonText: {
     color: colors.white,
     fontWeight: '600',

@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     marginBottom: spacing.sm,
-    backgroundColor: colors.background,
+    backgroundColor: colors.cardBackground,
     elevation: 2,
   },
   ingredientOptionCardSelected: {

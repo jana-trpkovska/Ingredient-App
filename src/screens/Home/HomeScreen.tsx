@@ -66,7 +66,6 @@ export default function HomeScreen({ navigation }: any) {
     );
   };
 
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Your Ingredients</Text>
