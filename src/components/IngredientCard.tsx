@@ -1,11 +1,11 @@
 import { View, Text, Image, TouchableOpacity, Alert } from 'react-native';
 import React from 'react';
 import { Ingredient } from '../types/ingredient';
-import { colors } from '../themes/colors';
 import { spacing } from '../themes/spacing';
 import { useIngredientStore } from '../store/ingredientStore';
 import deleteImage from '../assets/delete.png'
 import placeholderImage from '../assets/placeholder_ingredient.png'
+import { useTheme } from '../hooks/useTheme';
 
 interface Props {
   ingredient: Ingredient;
@@ -15,6 +15,7 @@ interface Props {
 const IngredientCard = ({ ingredient, onPress }: Props) => {
   const { id, name, image, category, quantity, unit } = ingredient;
   const deleteIngredient = useIngredientStore((state) => state.removeIngredient);
+  const { theme } = useTheme();
 
   const handleDelete = () => {
     Alert.alert(
@@ -40,8 +41,8 @@ const IngredientCard = ({ ingredient, onPress }: Props) => {
         padding: spacing.md,
         marginBottom: spacing.md,
         borderRadius: 12,
-        backgroundColor: colors.cardBackground,
-        shadowColor: colors.black,
+        backgroundColor: theme.cardBackground,
+        shadowColor: theme.textPrimary,
         shadowOpacity: 0.05,
         shadowRadius: 6,
         elevation: 2,
@@ -52,7 +53,7 @@ const IngredientCard = ({ ingredient, onPress }: Props) => {
           width: 60,
           height: 60,
           borderRadius: 30,
-          backgroundColor: colors.secondaryBackground,
+          backgroundColor: theme.secondaryBackground,
           justifyContent: 'center',
           alignItems: 'center',
           overflow: 'hidden',
@@ -67,7 +68,7 @@ const IngredientCard = ({ ingredient, onPress }: Props) => {
           style={{
             fontSize: 16,
             fontWeight: '600',
-            color: colors.textPrimary,
+            color: theme.textPrimary,
             marginBottom: 2,
           }}
         >
@@ -77,7 +78,7 @@ const IngredientCard = ({ ingredient, onPress }: Props) => {
         <Text
           style={{
             fontSize: 13,
-            color: colors.textSecondary,
+            color: theme.textSecondary,
             marginBottom: 4,
           }}
         >
@@ -85,7 +86,7 @@ const IngredientCard = ({ ingredient, onPress }: Props) => {
         </Text>
 
         {quantity !== undefined && (
-          <Text style={{ fontSize: 13, color: colors.textPrimary }}>
+          <Text style={{ fontSize: 13, color: theme.textPrimary }}>
             {quantity} {unit || ''}
           </Text>
         )}

@@ -12,22 +12,24 @@ import cookingIcon from '../assets/cooking.png';
 import settingsIcon from '../assets/setting.png';
 import recipesIcon from '../assets/recipe.png'
 
-import { colors } from '../themes/colors';
 import { spacing } from '../themes/spacing';
 import AddRecipeScreen from '../screens/AddRecipe/AddRecipeScreen';
+import { useTheme } from '../hooks/useTheme';
 
 const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   const insets = useSafeAreaInsets();
+  const { theme } = useTheme();
 
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textSecondary,
+        tabBarActiveTintColor: theme.primary,
+        tabBarInactiveTintColor: theme.textSecondary,
         tabBarStyle: {
+          backgroundColor: theme.bottomNavColor,
           height: 60 + insets.bottom,
           paddingBottom: spacing.sm + insets.bottom,
         },
@@ -43,7 +45,7 @@ export default function TabNavigator() {
               style={{
                 width: 24,
                 height: 24,
-                tintColor: focused ? colors.primary : colors.textSecondary,
+                tintColor: focused ? theme.primary : theme.textSecondary,
               }}
             />
           ),
@@ -60,7 +62,7 @@ export default function TabNavigator() {
               style={{
                 width: 24,
                 height: 24,
-                tintColor: focused ? colors.primary : colors.textSecondary,
+                tintColor: focused ? theme.primary : theme.textSecondary,
               }}
             />
           ),
@@ -77,7 +79,7 @@ export default function TabNavigator() {
               style={{
                 width: 24,
                 height: 24,
-                tintColor: focused ? colors.primary : colors.textSecondary,
+                tintColor: focused ? theme.primary : theme.textSecondary,
               }}
             />
           ),
@@ -94,7 +96,7 @@ export default function TabNavigator() {
               style={{
                 width: 24,
                 height: 24,
-                tintColor: focused ? colors.primary : colors.textSecondary,
+                tintColor: focused ? theme.primary : theme.textSecondary,
               }}
             />
           ),

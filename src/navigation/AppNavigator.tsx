@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, TouchableOpacity, StyleSheet } from 'react-native';
-import { NavigationContainer } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import TabNavigator from './TabNavigator';
@@ -10,22 +10,36 @@ import LoginScreen from '../screens/Login/LoginScreen';
 import SignupScreen from '../screens/Signup/SignupScreen';
 
 import avatarIcon from '../assets/avatar.png';
-import { colors } from '../themes/colors';
 import { spacing } from '../themes/spacing';
 import EditProfileScreen from '../screens/EditProfile/EditProfileScreen';
 import AddIngredientScreen from '../screens/AddIngredient/AddIngredientScreen';
 import IngredientDetailsScreen from '../screens/IngredientDetails/IngredientDetailsScreen';
 import DetailedRecipeScreen from '../screens/DetailedRecipe/DetailedRecipeScreen';
+import { useTheme } from '../hooks/useTheme';
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
+  const { theme, isDark } = useTheme();
+
+  const navigationTheme = {
+    ...(isDark ? DarkTheme : DefaultTheme),
+    colors: {
+      ...(isDark ? DarkTheme.colors : DefaultTheme.colors),
+      background: theme.background,
+      card: theme.headerBackground,
+      text: theme.textPrimary,
+      border: theme.border,
+      primary: theme.primary,
+    },
+  };
+
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={navigationTheme}>
       <Stack.Navigator
         screenOptions={({ navigation }) => ({
           headerStyle: {
-            backgroundColor: colors.headerBackground,
+            backgroundColor: theme.headerBackground,
           },
           headerTitle: () => <HeaderTitle />,
           headerTitleAlign: 'left',
@@ -37,6 +51,8 @@ export default function AppNavigator() {
               <Image source={avatarIcon} style={styles.avatar} />
             </TouchableOpacity>
           ),
+          headerBackTitleVisible: false,
+          headerTintColor: theme.headerColor,
         })}
       >
         <Stack.Screen 

@@ -5,9 +5,9 @@ import { useUserStore } from '../../store/userStore';
 import { addUser } from '../../services/userService';
 import { User } from '../../types/user';
 import { v4 as uuidv4 } from 'uuid';
-import { authStyles as styles } from '../../themes/auth.styles';
-import { colors } from '../../themes/colors';
-import icon from '../../../assets/icon.png'
+import { createStyles } from '../../themes/auth.styles';
+import icon from '../../../assets/icon.png';
+import { useTheme } from '../../hooks/useTheme';
 
 export default function SignupScreen({ navigation }: any) {
   const [fullName, setFullName] = useState('');
@@ -17,6 +17,9 @@ export default function SignupScreen({ navigation }: any) {
   const [secure, setSecure] = useState(true);
   const [secureConfirm, setSecureConfirm] = useState(true);
   const { setCurrentUser } = useUserStore();
+
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
   const handleSignup = () => {
     if (!fullName || !username || !password || !confirmPassword) {
@@ -65,7 +68,7 @@ export default function SignupScreen({ navigation }: any) {
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Full Name"
-            placeholderTextColor={colors.textSecondary}
+            placeholderTextColor={theme.textSecondary}
             value={fullName}
             onChangeText={setFullName}
             style={styles.input}
@@ -75,7 +78,7 @@ export default function SignupScreen({ navigation }: any) {
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Username"
-            placeholderTextColor={colors.textSecondary}
+            placeholderTextColor={theme.textSecondary}
             value={username}
             onChangeText={setUsername}
             style={styles.input}
@@ -85,7 +88,7 @@ export default function SignupScreen({ navigation }: any) {
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Password"
-            placeholderTextColor={colors.textSecondary}
+            placeholderTextColor={theme.textSecondary}
             value={password}
             onChangeText={setPassword}
             secureTextEntry={secure}
@@ -95,7 +98,7 @@ export default function SignupScreen({ navigation }: any) {
             <Ionicons
               name={secure ? 'eye-off-outline' : 'eye-outline'}
               size={22}
-              color={colors.textSecondary}
+              color={theme.textSecondary}
             />
           </TouchableOpacity>
         </View>
@@ -103,7 +106,7 @@ export default function SignupScreen({ navigation }: any) {
         <View style={styles.inputContainer}>
           <TextInput
             placeholder="Confirm Password"
-            placeholderTextColor={colors.textSecondary}
+            placeholderTextColor={theme.textSecondary}
             value={confirmPassword}
             onChangeText={setConfirmPassword}
             secureTextEntry={secureConfirm}
@@ -113,7 +116,7 @@ export default function SignupScreen({ navigation }: any) {
             <Ionicons
               name={secureConfirm ? 'eye-off-outline' : 'eye-outline'}
               size={22}
-              color={colors.textSecondary}
+              color={theme.textSecondary}
             />
           </TouchableOpacity>
         </View>

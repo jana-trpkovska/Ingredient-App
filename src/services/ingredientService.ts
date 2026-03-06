@@ -1,8 +1,6 @@
 import db from './database';
 import { Ingredient } from '../types/ingredient';
-import { IngredientCategory } from '../types/ingredientCategory';
 import { v4 as uuidv4 } from 'uuid';
-import { User } from '../types/user';
 
 export const addIngredient = (ingredient: Omit<Ingredient, 'id' | 'userId'>, userId: string) => {
   const id = uuidv4();

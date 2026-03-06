@@ -8,12 +8,16 @@ import { useUserStore } from '../../store/userStore';
 import { IngredientCategory } from '../../types/ingredientCategory';
 import { IngredientUnit } from '../../types/ingredientUnit';
 import * as ImagePicker from 'expo-image-picker';
-import { styles } from './AddIngredient.styles';
-import { colors } from '../../themes/colors';
+import { createStyles  } from './AddIngredient.styles';
+import { useTheme } from '../../hooks/useTheme';
 
 export default function AddIngredientScreen() {
   const navigation = useNavigation();
   const route = useRoute<any>();
+
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+  
   const { ingredientId } = route.params || {};
   const isEditMode = !!ingredientId;
 
@@ -148,7 +152,7 @@ export default function AddIngredientScreen() {
                 value={name}
                 onChangeText={setName}
                 placeholder="e.g., Tomatoes"
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={theme.textSecondary}
                 style={styles.input}
               />
             </View>
@@ -158,7 +162,7 @@ export default function AddIngredientScreen() {
               <Picker
                 selectedValue={category}
                 onValueChange={(val) => setCategory(val)}
-                style={{ flex: 1, color: colors.textSecondary }}
+                style={{ flex: 1, color: theme.textSecondary }}
               >
                 <Picker.Item label="Select category" value={null} />
                 {Object.values(IngredientCategory).map((cat) => (
@@ -173,7 +177,7 @@ export default function AddIngredientScreen() {
                 value={quantity !== null ? String(quantity) : ''}
                 onChangeText={(text) => setQuantity(Number(text))}
                 placeholder="e.g., 3"
-                placeholderTextColor={colors.textSecondary}
+                placeholderTextColor={theme.textSecondary}
                 style={styles.input}
                 keyboardType="numeric"
               />
@@ -184,7 +188,7 @@ export default function AddIngredientScreen() {
               <Picker
                 selectedValue={unit}
                 onValueChange={(val) => setUnit(val)}
-                style={{ flex: 1, color: colors.textSecondary }}
+                style={{ flex: 1, color: theme.textSecondary }}
               >
                 <Picker.Item label="Select unit" value="" />
                 {Object.values(IngredientUnit).map((u) => (

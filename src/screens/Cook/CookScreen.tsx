@@ -3,16 +3,18 @@ import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { useIngredientStore } from '../../store/ingredientStore';
 import { useRecipeStore } from '../../store/recipeStore';
-import { styles } from './Cook.styles';
-import { colors } from '../../themes/colors';
+import { createStyles } from './Cook.styles';
 import deleteIcon from '../../assets/delete.png';
 import { isIngredientMissing } from '../../utils/pantry';
+import { useTheme } from '../../hooks/useTheme';
 
 export default function CookScreen() {
   const navigation = useNavigation<any>();
   const ingredients = useIngredientStore((state) => state.ingredients);
   const savedRecipes = useRecipeStore((state) => state.savedRecipes);
   const removeRecipe = useRecipeStore((state) => state.removeRecipe);
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
   const userPantryNames = useMemo(
     () => ingredients.map((i) => i.name?.toLowerCase().trim()),
@@ -63,7 +65,7 @@ export default function CookScreen() {
           <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <View style={{ flex: 1, marginRight: 8 }}>
               <Text
-                style={[styles.recipeTitle, !cookable && { color: colors.textSecondary }]}
+                style={[styles.recipeTitle, !cookable && { color: theme.textSecondary }]}
                 numberOfLines={1}
                 ellipsizeMode="tail"
               >

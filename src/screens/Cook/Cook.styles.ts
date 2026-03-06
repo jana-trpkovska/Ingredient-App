@@ -1,80 +1,82 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../../themes/colors';
 import { spacing } from '../../themes/spacing';
+import type { Theme } from '../../types/Theme';
 
-export const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: colors.background,
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.lg,
-  },
+export const createStyles = (theme: Theme) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: theme.background,
+      paddingHorizontal: spacing.md,
+      paddingTop: spacing.lg,
+    },
 
-  title: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: colors.textPrimary,
-    marginBottom: spacing.md,
-  },
+    title: {
+      fontSize: 22,
+      fontWeight: '700',
+      color: theme.textPrimary,
+      marginBottom: spacing.md,
+    },
 
-  listContent: {
-    paddingBottom: 100,
-  },
+    listContent: {
+      paddingBottom: 100,
+    },
 
-  recipeCard: {
-    backgroundColor: colors.cardBackground,
-    borderRadius: 14,
-    marginBottom: spacing.md,
-    overflow: 'hidden',
-    elevation: 2,
-  },
+    recipeCard: {
+      backgroundColor: theme.cardBackground,
+      borderRadius: 14,
+      marginBottom: spacing.md,
+      overflow: 'hidden',
+      elevation: 2,
+    },
 
-  recipeCardDisabled: {
-    backgroundColor: colors.secondaryBackground,
-  },
+    recipeCardDisabled: {
+      backgroundColor: theme.secondaryBackground,
+    },
 
-  recipeImage: {
-    width: '100%',
-    height: 160,
-  },
+    recipeImage: {
+      width: '100%',
+      height: 160,
+    },
 
-  recipeInfo: {
-    padding: spacing.md,
-  },
+    recipeInfo: {
+      padding: spacing.md,
+      backgroundColor: theme.cardBackground,
+    },
 
-  recipeTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: colors.textPrimary,
-  },
+    recipeTitle: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: theme.textPrimary,
+    },
 
-  missingText: {
-    marginTop: 6,
-    fontSize: 13,
-    color: colors.textSecondary,
-  },
+    missingText: {
+      marginTop: 6,
+      fontSize: 13,
+      color: theme.textSecondary,
+    },
 
-  emptyText: {
-    textAlign: 'center',
-    marginTop: 40,
-    fontSize: 15,
-    color: colors.textSecondary,
-  },
+    emptyText: {
+      textAlign: 'center',
+      marginTop: 40,
+      fontSize: 15,
+      color: theme.textSecondary,
+    },
 
-  addButton: {
-    position: 'absolute',
-    bottom: 30,
-    left: 20,
-    right: 20,
-    backgroundColor: colors.primary,
-    paddingVertical: 16,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
+    addButton: {
+      position: 'absolute',
+      bottom: 30,
+      left: 20,
+      right: 20,
+      backgroundColor: theme.primary,
+      paddingVertical: 16,
+      borderRadius: 10,
+      alignItems: 'center',
+    },
 
-  addButtonText: {
-    color: colors.white,
-    fontSize: 16,
-    fontWeight: '600',
-  },
+    addButtonText: {
+      color: theme.surface,
+      fontSize: 16,
+      fontWeight: '600',
+    },
 });

@@ -2,12 +2,16 @@ import React from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useIngredientStore } from '../../store/ingredientStore';
-import { styles } from './IngredientDetails.styles';
+import { createStyles } from './IngredientDetails.styles';
 import placeholderImage from '../../assets/placeholder_ingredient.png'
+import { useTheme } from '../../hooks/useTheme';
 
 export default function IngredientDetailsScreen() {
   const route = useRoute<any>();
   const navigation = useNavigation<any>();
+
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
   const { ingredientId } = route.params;
 

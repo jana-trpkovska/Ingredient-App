@@ -38,6 +38,9 @@ export const initDB = () => {
       extendedIngredients TEXT,
       readyInMinutes INTEGER,
       servings INTEGER,
+      summary TEXT,
+      instructions TEXT,
+      analyzedInstructions TEXT,
       PRIMARY KEY (id, userId),
       FOREIGN KEY (userId) REFERENCES users(id) ON DELETE CASCADE
     );

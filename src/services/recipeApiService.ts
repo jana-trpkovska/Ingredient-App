@@ -19,10 +19,12 @@ const mapIngredient = (ingredient: any): IngredientAmount => ({
   unit: ingredient.unit ?? "",
 });
 
+const QUOTA_MESSAGE = "Spoonacular daily quota reached. Please try again later.";
+
 export const searchRecipesByIngredients = async (
   ingredients: string[],
   diet?: string
-): Promise<IngredientSearchRecipe[]> => {
+): Promise<{ data: IngredientSearchRecipe[]; error?: string }> => {
   try {
     const response = await api.get("/recipes/findByIngredients", {
       params: {
@@ -34,7 +36,7 @@ export const searchRecipesByIngredients = async (
       },
     });
 
-    return response.data.map((r: any) => ({
+    const results: IngredientSearchRecipe[] = response.data.map((r: any) => ({
       id: r.id,
       title: r.title,
       image: r.image,
@@ -47,16 +49,21 @@ export const searchRecipesByIngredients = async (
         ? r.missedIngredients.map(mapIngredient)
         : [],
     }));
-  } catch (error) {
-    console.error("Error fetching recipes from API:", error);
-    return [];
+
+    return { data: results };
+  } catch (error: any) {
+    const isQuotaError = error.response?.status === 402;
+    return {
+      data: [],
+      error: isQuotaError ? QUOTA_MESSAGE : error.response?.data?.message || "Error fetching recipes.",
+    };
   }
 };
 
 export const searchRecipesComplex = async (
   ingredients: string[],
   diet?: string
-): Promise<IngredientSearchRecipe[]> => {
+): Promise<{ data: IngredientSearchRecipe[]; error?: string }> => {
   try {
     const response = await api.get("/recipes/complexSearch", {
       params: {
@@ -67,7 +74,7 @@ export const searchRecipesComplex = async (
       },
     });
 
-    return response.data.results.map((r: any) => ({
+    const results: IngredientSearchRecipe[] = response.data.results.map((r: any) => ({
       id: r.id,
       title: r.title,
       image: r.image,
@@ -80,18 +87,25 @@ export const searchRecipesComplex = async (
         ? r.missedIngredients.map(mapIngredient)
         : [],
     }));
-  } catch (error) {
-    console.error("Error fetching recipes from complex search:", error);
-    return [];
+
+    return { data: results };
+  } catch (error: any) {
+    const isQuotaError = error.response?.status === 402;
+    return {
+      data: [],
+      error: isQuotaError ? QUOTA_MESSAGE : error.response?.data?.message || "Error fetching recipes.",
+    };
   }
 };
 
-export const getRecipeDetails = async (id: number): Promise<DetailedRecipe | null> => {
+export const getRecipeDetails = async (
+  id: number
+): Promise<{ data: DetailedRecipe | null; error?: string }> => {
   try {
     const response = await api.get(`/recipes/${id}/information`);
     const data = response.data;
 
-    return {
+    const detailed: DetailedRecipe = {
       id: data.id,
       title: data.title,
       image: data.image,
@@ -106,8 +120,13 @@ export const getRecipeDetails = async (id: number): Promise<DetailedRecipe | nul
         ? data.extendedIngredients.map(mapIngredient)
         : [],
     };
-  } catch (error) {
-    console.error(`Error fetching recipe details for ID ${id}:`, error);
-    return null;
+
+    return { data: detailed };
+  } catch (error: any) {
+    const isQuotaError = error.response?.status === 402;
+    return {
+      data: null,
+      error: isQuotaError ? QUOTA_MESSAGE : error.response?.data?.message || "Error fetching recipe details.",
+    };
   }
 };

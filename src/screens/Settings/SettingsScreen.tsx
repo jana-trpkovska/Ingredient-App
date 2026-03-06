@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Switch } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { styles } from './Settings.styles';
-import { colors } from '../../themes/colors';
+import { createStyles } from './Settings.styles';
+import { useTheme } from '../../hooks/useTheme';
 
 export default function SettingsScreen() {
   const navigation = useNavigation<any>();
-  const [darkMode, setDarkMode] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
+
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
   return (
     <View style={styles.container}>
@@ -25,10 +28,10 @@ export default function SettingsScreen() {
             </View>
 
             <Switch
-              value={darkMode}
-              onValueChange={setDarkMode}
-              trackColor={{ false: '#d1d1d6', true: colors.primary }}
-              thumbColor={'#f4f4f4'}
+              value={isDark}
+              onValueChange={toggleTheme}
+              trackColor={{ false: theme.settingsTrackColor, true: theme.primary }}
+              thumbColor={theme.settingsThumbColor}
             />
           </View>
         </View>

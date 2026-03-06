@@ -31,12 +31,3 @@ export type DetailedRecipe = {
   }[];
   extendedIngredients: IngredientAmount[];
 };
-
-export type SavedRecipe = {
-  id: number;
-  title: string;
-  image: string;
-  extendedIngredients: IngredientAmount[];
-  readyInMinutes?: number;
-  servings?: number;
-};

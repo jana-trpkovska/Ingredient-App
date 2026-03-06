@@ -1,31 +1,30 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView } from 'react-native';
-import { useIngredientStore } from '../../store/ingredientStore';
-import { useRecipeStore } from '../../store/recipeStore';
-import { useUserStore } from '../../store/userStore';
-import { IngredientSearchRecipe } from '../../types/recipe';
-import { styles } from './AddRecipe.styles';
-import { Ionicons } from '@expo/vector-icons';
-import { colors } from '../../themes/colors';
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import { useIngredientStore } from "../../store/ingredientStore";
+import { useRecipeStore } from "../../store/recipeStore";
+import { useUserStore } from "../../store/userStore";
+import { IngredientSearchRecipe } from "../../types/recipe";
+import { createStyles } from "./AddRecipe.styles";
+import { Ionicons } from "@expo/vector-icons";
+import { useTheme } from "../../hooks/useTheme";
 
 export default function AddRecipeScreen({ navigation }: any) {
   const { ingredients } = useIngredientStore();
-  const { searchRecipes, searchResults, saveRecipe, isRecipeSaved, removeRecipe } = useRecipeStore();
+  const { searchRecipes, searchResults, saveRecipe, isRecipeSaved, removeRecipe, apiMessage, clearApiMessage } = useRecipeStore();
   const { currentUser } = useUserStore();
 
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [showNoIngredientsMessage, setShowNoIngredientsMessage] = useState(false);
 
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
+
   const toggleIngredient = (name: string) => {
     setSelectedIngredients((prev) =>
-      prev.includes(name)
-        ? prev.filter((i) => i !== name)
-        : [...prev, name]
+      prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name]
     );
 
-    if (selectedIngredients.length === 0) {
-      setShowNoIngredientsMessage(false);
-    }
+    if (selectedIngredients.length === 0) setShowNoIngredientsMessage(false);
   };
 
   const handleSearch = () => {
@@ -33,15 +32,18 @@ export default function AddRecipeScreen({ navigation }: any) {
       setShowNoIngredientsMessage(true);
       return;
     }
-
     setShowNoIngredientsMessage(false);
 
-    if (currentUser?.diet?.trim()) {
-      searchRecipes(selectedIngredients, true);
-    } else {
-      searchRecipes(selectedIngredients);
-    }
+    if (currentUser?.diet?.trim()) searchRecipes(selectedIngredients, true);
+    else searchRecipes(selectedIngredients);
   };
+
+  useEffect(() => {
+    if (apiMessage) {
+      const timer = setTimeout(() => clearApiMessage(), 5000);
+      return () => clearTimeout(timer);
+    }
+  }, [apiMessage]);
 
   const renderIngredient = ({ item }: any) => {
     const selected = selectedIngredients.includes(item.name);
@@ -54,11 +56,16 @@ export default function AddRecipeScreen({ navigation }: any) {
           source={
             item.image
               ? { uri: item.image }
-              : require('../../assets/placeholder_ingredient.png')
+              : require("../../assets/placeholder_ingredient.png")
           }
           style={styles.ingredientOptionImage}
         />
-        <Text style={[styles.ingredientOptionText, selected && styles.ingredientOptionTextSelected]}>
+        <Text
+          style={[
+            styles.ingredientOptionText,
+            selected && styles.ingredientOptionTextSelected,
+          ]}
+        >
           {item.name}
         </Text>
       </TouchableOpacity>
@@ -70,7 +77,7 @@ export default function AddRecipeScreen({ navigation }: any) {
     return (
       <TouchableOpacity
         style={styles.recipeCard}
-        onPress={() => navigation.navigate('DetailedRecipe', { recipeId: item.id })}
+        onPress={() => navigation.navigate("DetailedRecipe", { recipeId: item.id })}
       >
         {item.image && <Image source={{ uri: item.image }} style={styles.recipeImage} />}
         <View style={styles.recipeInfo}>
@@ -80,17 +87,14 @@ export default function AddRecipeScreen({ navigation }: any) {
           </Text>
           <TouchableOpacity
             style={[styles.saveButton, saved && styles.saveButtonSaved]}
-            onPress={() => {
-              if (saved) removeRecipe(item.id);
-              else saveRecipe(item.id);
-            }}
+            onPress={() => (saved ? removeRecipe(item.id) : saveRecipe(item.id))}
           >
             <Ionicons
-              name={saved ? 'heart' : 'heart-outline'}
+              name={saved ? "heart" : "heart-outline"}
               size={20}
-              color={saved ? colors.heart : colors.textSecondary}
+              color={saved ? theme.danger : theme.textSecondary}
             />
-            <Text style={styles.saveButtonText}>{saved ? 'Saved' : 'Save'}</Text>
+            <Text style={styles.saveButtonText}>{saved ? "Saved" : "Save"}</Text>
           </TouchableOpacity>
         </View>
       </TouchableOpacity>
@@ -115,7 +119,7 @@ export default function AddRecipeScreen({ navigation }: any) {
       </View>
 
       {currentUser?.diet && (
-        <Text style={{ marginVertical: 8, color: colors.textSecondary }}>
+        <Text style={{ marginVertical: 8, color: theme.textSecondary }}>
           Diet applied: {currentUser.diet}
         </Text>
       )}
@@ -131,7 +135,14 @@ export default function AddRecipeScreen({ navigation }: any) {
       )}
 
       <Text style={styles.sectionTitle}>Results</Text>
-      {searchResults.length === 0 ? (
+
+      {apiMessage ? (
+        <Text
+          style={[styles.emptyText, { color: theme.danger, textAlign: "center" }]}
+        >
+          {apiMessage}
+        </Text>
+      ) : searchResults.length === 0 ? (
         <Text style={styles.emptyText}>No recipes found. Try searching!</Text>
       ) : (
         <View style={styles.recipeList}>

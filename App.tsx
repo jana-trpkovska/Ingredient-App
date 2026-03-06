@@ -38,9 +38,9 @@ export default function App() {
 
 
   return (
-  <>
-    <StatusBar style="dark" />
-    <AppNavigator />
-  </>
+    <>
+      <StatusBar style='dark' />
+      <AppNavigator />
+    </>
   );
 }

@@ -1,11 +1,17 @@
 import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useUserStore } from '../../store/userStore';
-import { styles } from './Profile.styles';
-import userIcon from '../../assets/avatar.png';
+import { createStyles } from './Profile.styles';
+import userIconLight from '../../assets/avatar.png';
+import userIconDark from '../../assets/avatar_dark_mode.png'
+import { useTheme } from '../../hooks/useTheme';
 
 export default function ProfileScreen({ navigation }: any) {
   const { currentUser, setCurrentUser } = useUserStore();
+
+  const { theme, isDark } = useTheme();
+  const styles = createStyles(theme);
+  const avatarSource = isDark ? userIconDark : userIconLight;
 
   useEffect(() => {
     if (!currentUser) {
@@ -26,7 +32,7 @@ export default function ProfileScreen({ navigation }: any) {
       
       <View style={styles.header} />
 
-      <Image source={userIcon} style={styles.avatar} />
+      <Image source={avatarSource} style={styles.avatar} />
 
       <Text style={styles.name}>{currentUser.fullName}</Text>
       <Text style={styles.username}>@{currentUser.username.trim()}</Text>

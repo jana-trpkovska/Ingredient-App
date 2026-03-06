@@ -4,71 +4,99 @@ import { useRoute } from '@react-navigation/native';
 import { useRecipeStore } from '../../store/recipeStore';
 import { useIngredientStore } from '../../store/ingredientStore';
 import { DetailedRecipe } from '../../types/recipe';
-import { styles } from './DetailedRecipe.styles';
-import { colors } from '../../themes/colors';
+import { createStyles } from './DetailedRecipe.styles';
 import timerIcon from '../../assets/timer.png';
 import servingsIcon from '../../assets/servings.png';
 import missingIcon from '../../assets/missing.png';
 import { isIngredientMissing } from '../../utils/pantry';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTheme } from '../../hooks/useTheme';
 
 export default function DetailedRecipeScreen() {
   const route = useRoute<any>();
   const { recipeId } = route.params;
 
-  const getRecipeDetailsById = useRecipeStore((state) => state.getRecipeDetailsById);
+  const { getRecipeDetailsById, savedRecipes, apiMessage, clearApiMessage } = useRecipeStore();
   const userIngredients = useIngredientStore((state) => state.ingredients);
   const removeIngredient = useIngredientStore((state) => state.removeIngredient);
 
-  const [recipe, setRecipe] = useState<DetailedRecipe | null>(null);
-  const [loading, setLoading] = useState(true);
+  const savedRecipe = savedRecipes.find(r => r.id === recipeId);
+  const [recipe, setRecipe] = useState<DetailedRecipe | null>(savedRecipe || null);
+  const [loading, setLoading] = useState(!savedRecipe);
 
   const insets = useSafeAreaInsets();
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
   const userPantryNames = useMemo(
-    () => userIngredients.map((i) => i.name?.toLowerCase().trim()),
+    () => userIngredients.map(i => i.name?.toLowerCase().trim()),
     [userIngredients]
   );
 
   const cookable = useMemo(() => {
     if (!recipe?.extendedIngredients) return false;
     return recipe.extendedIngredients.every(
-      (ing) => !isIngredientMissing(ing.name, userPantryNames)
+      ing => !isIngredientMissing(ing.name, userPantryNames)
     );
   }, [recipe, userPantryNames]);
 
   useEffect(() => {
+    if (recipe) return;
+
     const loadRecipe = async () => {
       setLoading(true);
       const data = await getRecipeDetailsById(recipeId);
-      setRecipe(data);
+
+      if (data && 'error' in data && data.error) {
+        setRecipe(null);
+      } else if (data) {
+        setRecipe(data as DetailedRecipe);
+      } else {
+        setRecipe(null);
+      }
+
       setLoading(false);
     };
     loadRecipe();
   }, [recipeId]);
 
-  const handleCookRecipe = () => {
-  if (!recipe?.extendedIngredients) return;
-
-  recipe.extendedIngredients.forEach((ing) => {
-    const missing = isIngredientMissing(ing.name, userPantryNames);
-    if (!missing) {
-      const userIng = userIngredients.find(
-        (ui) => ui.name.toLowerCase().trim() === ing.name.toLowerCase().trim()
-      );
-      if (userIng) {
-        removeIngredient(userIng.id);
-      }
+  useEffect(() => {
+    if (apiMessage) {
+      const timer = setTimeout(() => clearApiMessage(), 5000);
+      return () => clearTimeout(timer);
     }
-  });
+  }, [apiMessage]);
 
-  alert('Ingredients used!');
-};
+  const handleCookRecipe = () => {
+    if (!recipe?.extendedIngredients) return;
+
+    recipe.extendedIngredients.forEach(ing => {
+      const missing = isIngredientMissing(ing.name, userPantryNames);
+      if (!missing) {
+        const userIng = userIngredients.find(
+          ui => ui.name.toLowerCase().trim() === ing.name.toLowerCase().trim()
+        );
+        if (userIng) removeIngredient(userIng.id);
+      }
+    });
+
+    alert('Ingredients used!');
+  };
 
   if (loading) {
     return (
       <View style={styles.center}>
-        <ActivityIndicator size="large" color={colors.primary} />
+        <ActivityIndicator size="large" color={theme.primary} />
+      </View>
+    );
+  }
+
+  if (apiMessage) {
+    return (
+      <View style={styles.center}>
+        <Text style={{ color: theme.danger, textAlign: 'center' }}>
+          {apiMessage}
+        </Text>
       </View>
     );
   }
@@ -121,10 +149,10 @@ export default function DetailedRecipeScreen() {
           )}
 
           <Text style={styles.sectionTitle}>Ingredients</Text>
-          {recipe.extendedIngredients?.map((ing) => {
+          {recipe.extendedIngredients?.map((ing, index) => {
             const missing = isIngredientMissing(ing.name, userPantryNames);
             return (
-              <View key={ing.id} style={styles.ingredientRow}>
+              <View key={`${ing.id}-${index}`} style={styles.ingredientRow}>
                 <View style={styles.bullet} />
                 <Text style={styles.ingredientText}>
                   {ing.amount} {ing.unit} {ing.name}
@@ -136,7 +164,7 @@ export default function DetailedRecipeScreen() {
 
           <Text style={styles.sectionTitle}>Instructions</Text>
           {structuredSteps.length > 0 ? (
-            structuredSteps.map((step) => (
+            structuredSteps.map(step => (
               <View key={step.number} style={styles.stepRow}>
                 <View style={styles.stepBadge}>
                   <Text style={styles.stepBadgeText}>{step.number}</Text>

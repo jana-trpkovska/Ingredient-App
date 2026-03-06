@@ -3,8 +3,9 @@ import { View, Text, FlatList, TouchableOpacity, ScrollView, Image } from 'react
 import IngredientCard from '../../components/IngredientCard';
 import { useIngredientStore } from '../../store/ingredientStore';
 import { useUserStore } from '../../store/userStore';
-import { styles } from './Home.styles';
+import { createStyles } from './Home.styles';
 import { IngredientCategory } from '../../types/ingredientCategory';
+import { useTheme } from '../../hooks/useTheme';
 
 const CATEGORY_FILTERS = [
   { label: IngredientCategory.PRODUCE, image: require('../../assets/produce.png') },
@@ -21,6 +22,9 @@ export default function HomeScreen({ navigation }: any) {
 
   const [selectedCategory, setSelectedCategory] =
     useState<IngredientCategory | null>(null);
+
+  const { theme } = useTheme();
+  const styles = createStyles(theme);
 
   const handleAddIngredient = () => {
     navigation.navigate('AddIngredient');

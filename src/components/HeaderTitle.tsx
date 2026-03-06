@@ -2,11 +2,12 @@ import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import appConfig from '../../app.json';
-import { colors} from '../themes/colors';
 import { spacing } from '../themes/spacing';
+import { useTheme } from '../hooks/useTheme';
 
 export default function HeaderTitle() {
   const navigation = useNavigation<any>();
+  const { theme } = useTheme();
 
   const goToHome = () => {
     navigation.navigate('MainTabs', { screen: 'Home' });
@@ -18,7 +19,7 @@ export default function HeaderTitle() {
         style={{
           fontSize: 18,
           fontWeight: 'bold',
-          color: colors.textPrimary,
+          color: theme.headerColor,
           paddingHorizontal: spacing.sm,
         }}
       >

@@ -1,28 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  Image,
-  Alert,
-  KeyboardAvoidingView,
-  ScrollView,
-  Platform
-} from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, Alert, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useUserStore } from '../../store/userStore';
 import { updateUser } from '../../services/userService';
-import { styles } from './EditProfile.styles';
-import userIcon from '../../assets/avatar.png';
-import { colors } from '../../themes/colors';
+import { createStyles } from './EditProfile.styles';
+import userIconLight from '../../assets/avatar.png';
+import userIconDark from '../../assets/avatar_dark_mode.png'
 import { Picker } from '@react-native-picker/picker';
 import { Diet } from '../../types/diet';
+import { useTheme } from '../../hooks/useTheme';
 
 export default function EditProfileScreen({ navigation }: any) {
   const { currentUser, setCurrentUser } = useUserStore();
 
   const [fullName, setFullName] = useState('');
   const [diet, setDiet] = useState<Diet | null>(null);
+
+  const { theme, isDark } = useTheme();
+  const styles = createStyles(theme);
+  const avatarSource = isDark ? userIconDark : userIconLight;
 
   useEffect(() => {
     if (!currentUser) {
@@ -81,7 +76,7 @@ export default function EditProfileScreen({ navigation }: any) {
 
           <View style={styles.header} />
 
-          <Image source={userIcon} style={styles.avatar} />
+          <Image source={avatarSource} style={styles.avatar} />
 
           <Text style={styles.title}>Edit Profile</Text>
 
@@ -93,7 +88,7 @@ export default function EditProfileScreen({ navigation }: any) {
               value={fullName}
               onChangeText={setFullName}
               placeholder="Full Name"
-              placeholderTextColor={colors.textSecondary}
+              placeholderTextColor={theme.textSecondary}
               style={styles.input}
             />
 

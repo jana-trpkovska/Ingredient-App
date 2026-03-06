@@ -1,31 +1,34 @@
-import { create } from 'zustand';
-import { IngredientSearchRecipe, DetailedRecipe, SavedRecipe } from '../types/recipe';
-import { useUserStore } from './userStore';
+import { create } from "zustand";
+import { IngredientSearchRecipe, DetailedRecipe } from "../types/recipe";
+import { useUserStore } from "./userStore";
 import {
   addUserRecipe,
   getUserRecipes,
   removeUserRecipe,
-} from '../services/recipeLocalService';
+} from "../services/recipeLocalService";
 import {
   searchRecipesByIngredients,
   searchRecipesComplex,
   getRecipeDetails,
-} from '../services/recipeApiService';
+} from "../services/recipeApiService";
 
 interface RecipeStore {
-  savedRecipes: SavedRecipe[];
+  savedRecipes: DetailedRecipe[];
   searchResults: IngredientSearchRecipe[];
+  apiMessage: string | null;
   fetchSavedRecipes: () => void;
   searchRecipes: (ingredients: string[], useComplex?: boolean) => Promise<void>;
   saveRecipe: (recipeId: number) => Promise<void>;
   removeRecipe: (recipeId: number) => void;
   isRecipeSaved: (recipeId: number) => boolean;
   getRecipeDetailsById: (id: number) => Promise<DetailedRecipe | null>;
+  clearApiMessage: () => void;
 }
 
 export const useRecipeStore = create<RecipeStore>((set, get) => ({
   savedRecipes: [],
   searchResults: [],
+  apiMessage: null,
 
   fetchSavedRecipes: () => {
     const user = useUserStore.getState().currentUser;
@@ -39,17 +42,17 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
     const user = useUserStore.getState().currentUser;
     const diet = user?.diet || undefined;
 
-    try {
-      let results: IngredientSearchRecipe[] = [];
-      if (useComplex) {
-        results = await searchRecipesComplex(ingredients, diet);
-      } else {
-        results = await searchRecipesByIngredients(ingredients);
-      }
-      set({ searchResults: results });
-    } catch (error) {
-      console.error('Error searching recipes:', error);
-      set({ searchResults: [] });
+    let result;
+    if (useComplex) {
+      result = await searchRecipesComplex(ingredients, diet);
+    } else {
+      result = await searchRecipesByIngredients(ingredients, diet);
+    }
+
+    if (result.error) {
+      set({ searchResults: [], apiMessage: result.error });
+    } else {
+      set({ searchResults: result.data, apiMessage: null });
     }
   },
 
@@ -57,20 +60,16 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
     const user = useUserStore.getState().currentUser;
     if (!user) return;
 
-    const detailed = await getRecipeDetails(recipeId);
-    if (!detailed) return;
+    const { data, error } = await getRecipeDetails(recipeId);
+    if (error) {
+      set({ apiMessage: error });
+      return;
+    }
+    if (!data) return;
 
-    const recipeToSave: SavedRecipe = {
-      id: detailed.id,
-      title: detailed.title,
-      image: detailed.image,
-      extendedIngredients: detailed.extendedIngredients,
-      readyInMinutes: detailed.readyInMinutes,
-      servings: detailed.servings,
-    };
-
-    addUserRecipe(user.id, recipeToSave);
+    addUserRecipe(user.id, data);
     get().fetchSavedRecipes();
+    set({ apiMessage: null });
   },
 
   removeRecipe: (recipeId) => {
@@ -86,12 +85,13 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
   },
 
   getRecipeDetailsById: async (id) => {
-    try {
-      const details = await getRecipeDetails(id);
-      return details;
-    } catch (error) {
-      console.error(`Error fetching recipe details for ID ${id}:`, error);
-      return null;
-    }
+    const saved = get().savedRecipes.find((r) => r.id === id);
+    if (saved) return saved;
+
+    const { data, error } = await getRecipeDetails(id);
+    if (error) set({ apiMessage: error });
+    return data;
   },
+
+  clearApiMessage: () => set({ apiMessage: null }),
 }));

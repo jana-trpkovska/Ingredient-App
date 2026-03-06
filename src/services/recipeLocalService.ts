@@ -1,15 +1,12 @@
 import db from './database';
-import { SavedRecipe } from '../types/recipe';
+import { DetailedRecipe } from '../types/recipe';
 
-export const addUserRecipe = (
-  userId: string,
-  recipe: SavedRecipe
-) => {
+export const addUserRecipe = (userId: string, recipe: DetailedRecipe) => {
   try {
     db.runSync(
       `INSERT OR REPLACE INTO recipes
-       (id, userId, title, image, extendedIngredients, readyInMinutes, servings)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+       (id, userId, title, image, extendedIngredients, readyInMinutes, servings, summary, instructions, analyzedInstructions)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         recipe.id,
         userId,
@@ -18,19 +15,19 @@ export const addUserRecipe = (
         JSON.stringify(recipe.extendedIngredients),
         recipe.readyInMinutes ?? null,
         recipe.servings ?? null,
+        recipe.summary ?? "",
+        recipe.instructions ?? "",
+        JSON.stringify(recipe.analyzedInstructions ?? []),
       ]
     );
-
     return recipe;
   } catch (error) {
-    console.log('Error saving recipe:', error);
+    console.log("Error saving recipe:", error);
     throw error;
   }
 };
 
-export const getUserRecipes = (
-  userId: string
-): SavedRecipe[] => {
+export const getUserRecipes = (userId: string): DetailedRecipe[] => {
   try {
     const result = db.getAllSync<any>(
       `SELECT * FROM recipes WHERE userId = ?`,
@@ -42,11 +39,14 @@ export const getUserRecipes = (
       title: row.title,
       image: row.image,
       extendedIngredients: JSON.parse(row.extendedIngredients) ?? [],
-      readyInMinutes: row.readyInMinutes ?? undefined,
-      servings: row.servings ?? undefined,
+      readyInMinutes: row.readyInMinutes ?? 0,
+      servings: row.servings ?? 0,
+      summary: row.summary ?? "",
+      instructions: row.instructions ?? "",
+      analyzedInstructions: JSON.parse(row.analyzedInstructions) ?? [],
     }));
   } catch (error) {
-    console.log('Error fetching recipes:', error);
+    console.log("Error fetching recipes:", error);
     return [];
   }
 };
