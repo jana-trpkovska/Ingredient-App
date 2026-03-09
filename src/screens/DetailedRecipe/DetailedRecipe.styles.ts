@@ -79,7 +79,7 @@ export const createStyles = (theme: Theme) =>
     },
 
     contentCard: {
-      backgroundColor: theme.cardBackground,
+      backgroundColor: theme.background,
       marginTop: -30,
       borderTopLeftRadius: 28,
       borderTopRightRadius: 28,

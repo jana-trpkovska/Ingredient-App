@@ -11,7 +11,7 @@ export default function LoginScreen({ navigation }: any) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [secure, setSecure] = useState(true);
-  const { setCurrentUser } = useUserStore();
+  const { setCurrentUser, setUserId } = useUserStore();
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
@@ -29,8 +29,8 @@ export default function LoginScreen({ navigation }: any) {
       Alert.alert('Error', 'Incorrect password');
       return;
     }
+    setUserId(user.id);
     setCurrentUser(user);
-    navigation.goBack();
   };
 
   return (

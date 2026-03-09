@@ -7,7 +7,7 @@ import userIconDark from '../../assets/avatar_dark_mode.png'
 import { useTheme } from '../../hooks/useTheme';
 
 export default function ProfileScreen({ navigation }: any) {
-  const { currentUser, setCurrentUser } = useUserStore();
+  const { currentUser, setCurrentUser, setUserId } = useUserStore();
 
   const { theme, isDark } = useTheme();
   const styles = createStyles(theme);
@@ -18,6 +18,15 @@ export default function ProfileScreen({ navigation }: any) {
       navigation.replace('Login');
     }
   }, [currentUser]);
+
+  const handleLogout = async () => {
+    try {
+      setUserId(null);
+      setCurrentUser(null);
+    } catch (error) {
+      console.log('Error logging out:', error);
+    }
+  };
 
   if (!currentUser) {
     return (
@@ -64,7 +73,7 @@ export default function ProfileScreen({ navigation }: any) {
 
       <TouchableOpacity
         style={styles.logoutButton}
-        onPress={() => setCurrentUser(null)}
+        onPress={handleLogout}
       >
         <Text style={styles.logoutText}>Logout</Text>
       </TouchableOpacity>

@@ -8,19 +8,21 @@ import ProfileScreen from '../screens/Profile/ProfileScreen';
 import HeaderTitle from '../components/HeaderTitle';
 import LoginScreen from '../screens/Login/LoginScreen';
 import SignupScreen from '../screens/Signup/SignupScreen';
-
-import avatarIcon from '../assets/avatar.png';
-import { spacing } from '../themes/spacing';
 import EditProfileScreen from '../screens/EditProfile/EditProfileScreen';
 import AddIngredientScreen from '../screens/AddIngredient/AddIngredientScreen';
 import IngredientDetailsScreen from '../screens/IngredientDetails/IngredientDetailsScreen';
 import DetailedRecipeScreen from '../screens/DetailedRecipe/DetailedRecipeScreen';
+
+import avatarIcon from '../assets/avatar.png';
+import { spacing } from '../themes/spacing';
 import { useTheme } from '../hooks/useTheme';
+import { useUserStore } from '../store/userStore';
 
 const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
   const { theme, isDark } = useTheme();
+  const { currentUser } = useUserStore();
 
   const navigationTheme = {
     ...(isDark ? DarkTheme : DefaultTheme),
@@ -38,9 +40,7 @@ export default function AppNavigator() {
     <NavigationContainer theme={navigationTheme}>
       <Stack.Navigator
         screenOptions={({ navigation }) => ({
-          headerStyle: {
-            backgroundColor: theme.headerBackground,
-          },
+          headerStyle: { backgroundColor: theme.headerBackground },
           headerTitle: () => <HeaderTitle />,
           headerTitleAlign: 'left',
           headerRight: () => (
@@ -55,43 +55,21 @@ export default function AppNavigator() {
           headerTintColor: theme.headerColor,
         })}
       >
-        <Stack.Screen 
-          name="MainTabs" 
-          component={TabNavigator} 
-        />
-        <Stack.Screen 
-          name="AddIngredient" 
-          component={AddIngredientScreen} 
-        />
-        <Stack.Screen 
-          name="IngredientDetails" 
-          component={IngredientDetailsScreen} 
-        />
-        <Stack.Screen 
-          name="DetailedRecipe" 
-          component={DetailedRecipeScreen} 
-        />
-
-        <Stack.Screen 
-          name="Profile" 
-          component={ProfileScreen} 
-          options={{ headerShown: false }} 
-        />
-        <Stack.Screen 
-          name="EditProfile" 
-          component={EditProfileScreen} 
-          options={{ headerShown: false }} 
-        />
-        <Stack.Screen 
-          name="Login" 
-          component={LoginScreen} 
-          options={{ headerShown: false }} 
-        />
-        <Stack.Screen 
-          name="Signup" 
-          component={SignupScreen} 
-          options={{ headerShown: false }} 
-        />
+        {currentUser ? (
+          <>
+            <Stack.Screen name="MainTabs" component={TabNavigator} />
+            <Stack.Screen name="AddIngredient" component={AddIngredientScreen} />
+            <Stack.Screen name="IngredientDetails" component={IngredientDetailsScreen} />
+            <Stack.Screen name="DetailedRecipe" component={DetailedRecipeScreen} />
+            <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{ headerShown: false }} />
+          </>
+        ) : (
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
+          </>
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );

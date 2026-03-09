@@ -6,13 +6,7 @@ export const addUser = (user: User) => {
     db.runSync(
       `INSERT INTO users (id, fullName, username, password, diet)
        VALUES (?, ?, ?, ?, ?)`,
-      [
-        user.id,
-        user.fullName,
-        user.username,
-        user.password,
-        user.diet ?? null,
-      ]
+      [user.id, user.fullName, user.username, user.password, user.diet ?? null]
     );
   } catch (error) {
     console.log('Error adding user:', error);
@@ -22,8 +16,7 @@ export const addUser = (user: User) => {
 
 export const getUsers = (): User[] => {
   try {
-    const result = db.getAllSync<User>(`SELECT * FROM users`);
-    return result;
+    return db.getAllSync<User>(`SELECT * FROM users`);
   } catch (error) {
     console.log('Error getting users:', error);
     return [];
@@ -32,13 +25,33 @@ export const getUsers = (): User[] => {
 
 export const getUserByUsername = (username: string): User | undefined => {
   try {
-    const result = db.getFirstSync<User>(
+    return db.getFirstSync<User>(
       `SELECT * FROM users WHERE username = ?`,
       [username]
-    );
-    return result ?? undefined;
+    ) ?? undefined;
   } catch (error) {
     console.log('Error getting user:', error);
+    return undefined;
+  }
+};
+
+export const getUserById = async (id: string): Promise<User | undefined> => {
+  try {
+    const user: User | undefined = await new Promise((resolve) => {
+      try {
+        const result = db.getFirstSync<User>(
+          `SELECT * FROM users WHERE id = ?`,
+          [id]
+        );
+        resolve(result ?? undefined);
+      } catch (error) {
+        console.log('Error getting user by id:', error);
+        resolve(undefined);
+      }
+    });
+    return user;
+  } catch (error) {
+    console.log('Error in getUserById:', error);
     return undefined;
   }
 };

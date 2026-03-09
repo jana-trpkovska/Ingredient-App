@@ -16,7 +16,7 @@ export default function SignupScreen({ navigation }: any) {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [secure, setSecure] = useState(true);
   const [secureConfirm, setSecureConfirm] = useState(true);
-  const { setCurrentUser } = useUserStore();
+  const { setCurrentUser, setUserId } = useUserStore();
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
@@ -41,8 +41,8 @@ export default function SignupScreen({ navigation }: any) {
 
     try {
       addUser(newUser);
+      setUserId(newUser.id);
       setCurrentUser(newUser);
-      navigation.goBack();
     } catch (error) {
       Alert.alert('Error', 'Username already exists or invalid input');
     }
