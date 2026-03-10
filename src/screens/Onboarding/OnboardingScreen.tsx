@@ -1,12 +1,13 @@
 import React, { useRef, useState } from 'react';
-import { View, TouchableOpacity, Text, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import Animated, { useSharedValue, useAnimatedStyle, interpolate, useAnimatedScrollHandler } from 'react-native-reanimated';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import OnboardingItem from './OnboardingItem';
 import { ONBOARDING_DATA } from './onboardingData';
-import Animated, { useSharedValue, useAnimatedStyle, interpolate, useAnimatedScrollHandler } from 'react-native-reanimated';
 import { useTheme } from '../../hooks/useTheme';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createOnboardingStyles } from './Onboarding.styles';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { CommonActions } from '@react-navigation/native';
 
 const { width, height } = Dimensions.get('window');
 const AnimatedFlatList = Animated.FlatList;
@@ -26,7 +27,14 @@ export default function OnboardingScreen({ navigation, onFinish }: any) {
 
   const handleFinish = async () => {
     await AsyncStorage.setItem('onboardingSeen', 'true');
-    onFinish();
+    onFinish?.();
+
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'MainTabs' }],
+      })
+    );
   };
 
   const handleNext = () => {
@@ -70,15 +78,9 @@ export default function OnboardingScreen({ navigation, onFinish }: any) {
         <View style={[styles.paginationContainer, { marginTop: 10 }]}>
           {ONBOARDING_DATA.map((_, index) => {
             const animatedStyle = useAnimatedStyle(() => {
-              const scale = interpolate(
-                scrollX.value / width,
-                [index - 1, index, index + 1],
-                [0.8, 1.4, 0.8],
-                'clamp'
-              );
+              const scale = interpolate(scrollX.value / width, [index - 1, index, index + 1], [0.8, 1.4, 0.8], 'clamp');
               return { transform: [{ scale }] };
             });
-
             return <Animated.View key={index.toString()} style={[styles.dot, animatedStyle]} />;
           })}
         </View>

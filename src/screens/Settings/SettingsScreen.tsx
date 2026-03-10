@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Switch } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { createStyles } from './Settings.styles';
 import { useTheme } from '../../hooks/useTheme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function SettingsScreen() {
   const navigation = useNavigation<any>();
@@ -10,6 +11,15 @@ export default function SettingsScreen() {
 
   const { theme } = useTheme();
   const styles = createStyles(theme);
+
+    const handleReplayOnboarding = async () => {
+    try {
+      await AsyncStorage.setItem('onboardingSeen', 'false');
+      navigation.navigate('Onboarding');
+    } catch (error) {
+      console.log('Error replaying onboarding:', error);
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -63,7 +73,7 @@ export default function SettingsScreen() {
         <View style={styles.card}>
           <TouchableOpacity
             style={styles.row}
-            onPress={() => navigation.navigate('Onboarding')}
+            onPress={handleReplayOnboarding}
           >
             <View style={styles.rowLeft}>
               <Text style={styles.rowLabel}>Replay Onboarding</Text>

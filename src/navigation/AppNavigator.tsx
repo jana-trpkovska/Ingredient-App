@@ -31,8 +31,7 @@ export default function AppNavigator() {
   useEffect(() => {
     const checkOnboarding = async () => {
       const seen = await AsyncStorage.getItem('onboardingSeen');
-      // setOnboardingSeen(seen === 'true');
-      setOnboardingSeen(false);
+      setOnboardingSeen(seen === 'true');
     };
     checkOnboarding();
   }, []);
@@ -51,9 +50,12 @@ export default function AppNavigator() {
 
   if (onboardingSeen === null) return null;
 
+  const initialRoute = onboardingSeen ? (currentUser ? 'MainTabs' : 'Login') : 'Onboarding';
+
   return (
     <NavigationContainer theme={navigationTheme}>
       <Stack.Navigator
+        initialRouteName={initialRoute}
         screenOptions={({ navigation }) => ({
           headerStyle: { backgroundColor: theme.headerBackground },
           headerTitle: () => <HeaderTitle />,
@@ -71,27 +73,26 @@ export default function AppNavigator() {
           headerTintColor: theme.headerColor,
         })}
       >
-        {!onboardingSeen && (
-          <Stack.Screen 
+        <Stack.Screen
           name="Onboarding"
-          options={{headerShown: false}} >
-            {(props) => (
-              <OnboardingScreen
-                {...props}
-                onFinish={() => setOnboardingSeen(true)}
-              />
-            )}
-          </Stack.Screen>
-        )}
+          options={{ headerShown: false }}
+        >
+          {(props) => (
+            <OnboardingScreen
+              {...props}
+              onFinish={() => setOnboardingSeen(true)}
+            />
+          )}
+        </Stack.Screen>
 
-        {onboardingSeen && !currentUser && (
+        {!currentUser && (
           <>
             <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
             <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
           </>
         )}
 
-        {onboardingSeen && currentUser && (
+        {currentUser && (
           <>
             <Stack.Screen name="MainTabs" component={TabNavigator} />
             <Stack.Screen name="AddIngredient" component={AddIngredientScreen} />
