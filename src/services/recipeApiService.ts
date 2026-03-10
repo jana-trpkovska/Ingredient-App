@@ -71,6 +71,7 @@ export const searchRecipesComplex = async (
         diet: diet || undefined,
         number: 20,
         addRecipeInformation: true,
+        fillIngredients: true,
       },
     });
 

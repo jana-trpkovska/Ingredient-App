@@ -6,19 +6,19 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import HomeScreen from '../screens/Home/HomeScreen';
 import CookScreen from '../screens/Cook/CookScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
+import AddRecipeScreen from '../screens/AddRecipe/AddRecipeScreen';
 
 import homeIcon from '../assets/home.png';
 import cookingIcon from '../assets/cooking.png';
 import settingsIcon from '../assets/setting.png';
-import recipesIcon from '../assets/recipe.png'
+import recipesIcon from '../assets/recipe.png';
 
 import { spacing } from '../themes/spacing';
-import AddRecipeScreen from '../screens/AddRecipe/AddRecipeScreen';
 import { useTheme } from '../hooks/useTheme';
 
 const Tab = createBottomTabNavigator();
 
-export default function TabNavigator() {
+export default function TabNavigator({ setOnboardingSeen }: any) {
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
 
@@ -51,7 +51,6 @@ export default function TabNavigator() {
           ),
         }}
       />
-
       <Tab.Screen
         name="Add Recipe"
         component={AddRecipeScreen}
@@ -68,7 +67,6 @@ export default function TabNavigator() {
           ),
         }}
       />
-
       <Tab.Screen
         name="Cook"
         component={CookScreen}
@@ -85,10 +83,8 @@ export default function TabNavigator() {
           ),
         }}
       />
-
       <Tab.Screen
         name="Settings"
-        component={SettingsScreen}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
@@ -101,7 +97,9 @@ export default function TabNavigator() {
             />
           ),
         }}
-      />
+      >
+        {props => <SettingsScreen {...props} setOnboardingSeen={setOnboardingSeen} />}
+      </Tab.Screen>
     </Tab.Navigator>
   );
 }

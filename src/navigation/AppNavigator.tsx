@@ -36,6 +36,9 @@ export default function AppNavigator() {
     checkOnboarding();
   }, []);
 
+
+  if (onboardingSeen === null) return null;
+
   const navigationTheme = {
     ...(isDark ? DarkTheme : DefaultTheme),
     colors: {
@@ -48,14 +51,9 @@ export default function AppNavigator() {
     },
   };
 
-  if (onboardingSeen === null) return null;
-
-  const initialRoute = onboardingSeen ? (currentUser ? 'MainTabs' : 'Login') : 'Onboarding';
-
   return (
-    <NavigationContainer theme={navigationTheme}>
+    <NavigationContainer key={onboardingSeen ? 'main' : 'onboarding'} theme={navigationTheme}>
       <Stack.Navigator
-        initialRouteName={initialRoute}
         screenOptions={({ navigation }) => ({
           headerStyle: { backgroundColor: theme.headerBackground },
           headerTitle: () => <HeaderTitle />,
@@ -73,28 +71,41 @@ export default function AppNavigator() {
           headerTintColor: theme.headerColor,
         })}
       >
-        <Stack.Screen
-          name="Onboarding"
-          options={{ headerShown: false }}
-        >
-          {(props) => (
-            <OnboardingScreen
-              {...props}
-              onFinish={() => setOnboardingSeen(true)}
-            />
-          )}
-        </Stack.Screen>
+        {!onboardingSeen && (
+          <Stack.Screen name="Onboarding" options={{ headerShown: false }}>
+            {(props) => (
+              <OnboardingScreen
+                {...props}
+                onFinish={async () => {
+                  await AsyncStorage.setItem('onboardingSeen', 'true');
+                  setOnboardingSeen(true);
+                  props.navigation.replace(currentUser ? 'MainTabs' : 'Login');
+                }}
+              />
+            )}
+          </Stack.Screen>
+        )}
 
         {!currentUser && (
           <>
-            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Signup"
+              component={SignupScreen}
+              options={{ headerShown: false }}
+            />
           </>
         )}
 
         {currentUser && (
           <>
-            <Stack.Screen name="MainTabs" component={TabNavigator} />
+            <Stack.Screen name="MainTabs">
+              {(props) => <TabNavigator {...props} setOnboardingSeen={setOnboardingSeen} />}
+            </Stack.Screen>
             <Stack.Screen name="AddIngredient" component={AddIngredientScreen} />
             <Stack.Screen name="IngredientDetails" component={IngredientDetailsScreen} />
             <Stack.Screen name="DetailedRecipe" component={DetailedRecipeScreen} />

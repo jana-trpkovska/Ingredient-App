@@ -38,7 +38,7 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
     set({ savedRecipes: recipes });
   },
 
-  searchRecipes: async (ingredients: string[], useComplex = true) => {
+  searchRecipes: async (ingredients: string[], useComplex = false) => {
     const user = useUserStore.getState().currentUser;
     const diet = user?.diet || undefined;
 
