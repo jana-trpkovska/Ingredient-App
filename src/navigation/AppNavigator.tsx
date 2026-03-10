@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { DarkTheme, DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import TabNavigator from './TabNavigator';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
@@ -12,6 +13,7 @@ import EditProfileScreen from '../screens/EditProfile/EditProfileScreen';
 import AddIngredientScreen from '../screens/AddIngredient/AddIngredientScreen';
 import IngredientDetailsScreen from '../screens/IngredientDetails/IngredientDetailsScreen';
 import DetailedRecipeScreen from '../screens/DetailedRecipe/DetailedRecipeScreen';
+import OnboardingScreen from '../screens/Onboarding/OnboardingScreen';
 
 import avatarIcon from '../assets/avatar.png';
 import { spacing } from '../themes/spacing';
@@ -23,6 +25,17 @@ const Stack = createNativeStackNavigator();
 export default function AppNavigator() {
   const { theme, isDark } = useTheme();
   const { currentUser } = useUserStore();
+
+  const [onboardingSeen, setOnboardingSeen] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkOnboarding = async () => {
+      const seen = await AsyncStorage.getItem('onboardingSeen');
+      // setOnboardingSeen(seen === 'true');
+      setOnboardingSeen(false);
+    };
+    checkOnboarding();
+  }, []);
 
   const navigationTheme = {
     ...(isDark ? DarkTheme : DefaultTheme),
@@ -36,6 +49,8 @@ export default function AppNavigator() {
     },
   };
 
+  if (onboardingSeen === null) return null;
+
   return (
     <NavigationContainer theme={navigationTheme}>
       <Stack.Navigator
@@ -43,19 +58,40 @@ export default function AppNavigator() {
           headerStyle: { backgroundColor: theme.headerBackground },
           headerTitle: () => <HeaderTitle />,
           headerTitleAlign: 'left',
-          headerRight: () => (
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Profile')}
-              style={styles.avatarContainer}
-            >
-              <Image source={avatarIcon} style={styles.avatar} />
-            </TouchableOpacity>
-          ),
+          headerRight: () =>
+            currentUser && (
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Profile')}
+                style={styles.avatarContainer}
+              >
+                <Image source={avatarIcon} style={styles.avatar} />
+              </TouchableOpacity>
+            ),
           headerBackTitleVisible: false,
           headerTintColor: theme.headerColor,
         })}
       >
-        {currentUser ? (
+        {!onboardingSeen && (
+          <Stack.Screen 
+          name="Onboarding"
+          options={{headerShown: false}} >
+            {(props) => (
+              <OnboardingScreen
+                {...props}
+                onFinish={() => setOnboardingSeen(true)}
+              />
+            )}
+          </Stack.Screen>
+        )}
+
+        {onboardingSeen && !currentUser && (
+          <>
+            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
+          </>
+        )}
+
+        {onboardingSeen && currentUser && (
           <>
             <Stack.Screen name="MainTabs" component={TabNavigator} />
             <Stack.Screen name="AddIngredient" component={AddIngredientScreen} />
@@ -63,11 +99,6 @@ export default function AppNavigator() {
             <Stack.Screen name="DetailedRecipe" component={DetailedRecipeScreen} />
             <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
             <Stack.Screen name="EditProfile" component={EditProfileScreen} options={{ headerShown: false }} />
-          </>
-        ) : (
-          <>
-            <Stack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-            <Stack.Screen name="Signup" component={SignupScreen} options={{ headerShown: false }} />
           </>
         )}
       </Stack.Navigator>

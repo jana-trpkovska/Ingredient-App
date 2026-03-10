@@ -17,4 +17,6 @@ export const lightTheme = {
   settingsText: '#67676a',
   settingsTrackColor: '#d1d1d6',
   settingsThumbColor: '#f4f4f4',
+
+  onboardingSkipColor: 'rgba(0,0,0,0.1)',
 };

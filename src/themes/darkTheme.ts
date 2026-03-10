@@ -17,4 +17,6 @@ export const darkTheme = {
   settingsText: '#cccccc',  
   settingsTrackColor: '#444444',
   settingsThumbColor: '#888888',
+
+  onboardingSkipColor: 'rgba(255, 255, 255, 0.34)'
 };
