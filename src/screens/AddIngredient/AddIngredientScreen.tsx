@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, Alert, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Picker } from '@react-native-picker/picker';
 import { useRoute, useNavigation } from '@react-navigation/native';
@@ -8,8 +8,9 @@ import { useUserStore } from '../../store/userStore';
 import { IngredientCategory } from '../../types/ingredientCategory';
 import { IngredientUnit } from '../../types/ingredientUnit';
 import * as ImagePicker from 'expo-image-picker';
-import { createStyles  } from './AddIngredient.styles';
+import { createStyles } from './AddIngredient.styles';
 import { useTheme } from '../../hooks/useTheme';
+import CustomAlert from '../../components/modals/CustomAlert';
 
 export default function AddIngredientScreen() {
   const navigation = useNavigation();
@@ -37,10 +38,15 @@ export default function AddIngredientScreen() {
   const [unit, setUnit] = useState<IngredientUnit | ''>(ingredient?.unit ?? '');
   const [image, setImage] = useState<string | null>(ingredient?.image ?? null);
 
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
+  const [alertTitle, setAlertTitle] = useState('');
+
   useEffect(() => {
     if (isEditMode && !ingredient) {
-      Alert.alert('Error', 'Ingredient not found');
-      navigation.goBack();
+      setAlertTitle('Error');
+      setAlertMessage('Ingredient not found');
+      setAlertVisible(true);
     }
   }, [ingredient]);
 
@@ -50,10 +56,9 @@ export default function AddIngredientScreen() {
       const libraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
       if (!cameraStatus.granted || !libraryStatus.granted) {
-        Alert.alert(
-          'Permission required',
-          'Camera and media library access are required to add ingredient images.'
-        );
+        setAlertTitle('Permission Required');
+        setAlertMessage('Camera and media library access are required to add ingredient images');
+        setAlertVisible(true);
         return false;
       }
     }
@@ -90,17 +95,23 @@ export default function AddIngredientScreen() {
 
   const handleSubmit = () => {
     if (!name.trim()) {
-      Alert.alert('Validation', 'Please enter the ingredient name.');
+      setAlertTitle('Validation');
+      setAlertMessage('Please enter the ingredient name');
+      setAlertVisible(true);
       return;
     }
 
     if (!category) {
-      Alert.alert('Validation', 'Please select a category.');
+      setAlertTitle('Validation');
+      setAlertMessage('Please select a category');
+      setAlertVisible(true);
       return;
     }
 
     if (!currentUser) {
-      Alert.alert('Error', 'No user logged in.');
+      setAlertTitle('Error');
+      setAlertMessage('No user logged in');
+      setAlertVisible(true);
       return;
     }
 
@@ -119,7 +130,7 @@ export default function AddIngredientScreen() {
         category,
         quantity: quantity ?? undefined,
         unit: unit || undefined,
-        image: image ?? undefined
+        image: image ?? undefined,
       });
     }
 
@@ -225,6 +236,13 @@ export default function AddIngredientScreen() {
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
+
+      <CustomAlert
+        visible={alertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        onClose={() => setAlertVisible(false)}
+      />
     </SafeAreaView>
   );
 }

@@ -11,6 +11,7 @@ import missingIcon from '../../assets/missing.png';
 import { isIngredientMissing } from '../../utils/pantry';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../hooks/useTheme';
+import CustomAlert from '../../components/modals/CustomAlert';
 
 export default function DetailedRecipeScreen() {
   const route = useRoute<any>();
@@ -40,6 +41,10 @@ export default function DetailedRecipeScreen() {
     );
   }, [recipe, userPantryNames]);
 
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+
   useEffect(() => {
     if (recipe) return;
 
@@ -49,10 +54,16 @@ export default function DetailedRecipeScreen() {
 
       if (data && 'error' in data && data.error) {
         setRecipe(null);
+        setAlertTitle('Error');
+        setAlertMessage('Failed to load recipe');
+        setAlertVisible(true);
       } else if (data) {
         setRecipe(data as DetailedRecipe);
       } else {
         setRecipe(null);
+        setAlertTitle('Error');
+        setAlertMessage('Recipe not found');
+        setAlertVisible(true);
       }
 
       setLoading(false);
@@ -80,7 +91,9 @@ export default function DetailedRecipeScreen() {
       }
     });
 
-    alert('Ingredients used!');
+    setAlertTitle('Success');
+    setAlertMessage('Ingredients used!');
+    setAlertVisible(true);
   };
 
   if (loading) {
@@ -188,6 +201,13 @@ export default function DetailedRecipeScreen() {
           <Text style={styles.cookButtonText}>I am making this</Text>
         </TouchableOpacity>
       )}
+
+      <CustomAlert
+        visible={alertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        onClose={() => setAlertVisible(false)}
+      />
     </View>
   );
 }

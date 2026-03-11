@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Image, Alert, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useUserStore } from '../../store/userStore';
 import { updateUser } from '../../services/userService';
 import { createStyles } from './EditProfile.styles';
 import userIconLight from '../../assets/avatar.png';
-import userIconDark from '../../assets/avatar_dark_mode.png'
+import userIconDark from '../../assets/avatar_dark_mode.png';
 import { Picker } from '@react-native-picker/picker';
 import { Diet } from '../../types/diet';
 import { useTheme } from '../../hooks/useTheme';
+import CustomAlert from '../../components/modals/CustomAlert';
 
 export default function EditProfileScreen({ navigation }: any) {
   const { currentUser, setCurrentUser } = useUserStore();
@@ -18,6 +19,10 @@ export default function EditProfileScreen({ navigation }: any) {
   const { theme, isDark } = useTheme();
   const styles = createStyles(theme);
   const avatarSource = isDark ? userIconDark : userIconLight;
+
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     if (!currentUser) {
@@ -31,7 +36,9 @@ export default function EditProfileScreen({ navigation }: any) {
 
   const handleSave = () => {
     if (!fullName.trim()) {
-      Alert.alert('Error', 'Full name cannot be empty');
+      setAlertTitle('Error');
+      setAlertMessage('Full name cannot be empty');
+      setAlertVisible(true);
       return;
     }
 
@@ -48,7 +55,9 @@ export default function EditProfileScreen({ navigation }: any) {
       setCurrentUser(updatedUser);
       navigation.goBack();
     } catch (error) {
-      Alert.alert('Error', 'Failed to update profile');
+      setAlertTitle('Error');
+      setAlertMessage('Failed to update profile');
+      setAlertVisible(true);
     }
   };
 
@@ -117,6 +126,13 @@ export default function EditProfileScreen({ navigation }: any) {
 
         </View>
       </ScrollView>
+
+      <CustomAlert
+        visible={alertVisible}
+        title={alertTitle}
+        message={alertMessage}
+        onClose={() => setAlertVisible(false)}
+      />
     </KeyboardAvoidingView>
   );
 }

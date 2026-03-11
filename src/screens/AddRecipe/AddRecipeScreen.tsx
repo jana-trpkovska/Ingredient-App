@@ -133,12 +133,6 @@ export default function AddRecipeScreen({ navigation }: any) {
         </ScrollView>
       </View>
 
-      {currentUser?.diet && (
-        <Text style={{ marginVertical: 8, color: theme.textSecondary }}>
-          Diet applied: {currentUser.diet}
-        </Text>
-      )}
-
       {showEmptyState && (
         <View style={styles.emptyContainer}>
           <Image source={noIngredientsImg} style={styles.emptyImage} />
@@ -147,6 +141,12 @@ export default function AddRecipeScreen({ navigation }: any) {
             Start adding ingredients to search for recipes easily!
           </Text>
         </View>
+      )}
+
+      {currentUser?.diet && (
+        <Text style={{ marginVertical: 8, color: theme.textSecondary }}>
+          Diet applied: {currentUser.diet}
+        </Text>
       )}
 
       <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
