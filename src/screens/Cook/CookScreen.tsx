@@ -5,6 +5,7 @@ import { useIngredientStore } from '../../store/ingredientStore';
 import { useRecipeStore } from '../../store/recipeStore';
 import { createStyles } from './Cook.styles';
 import deleteIcon from '../../assets/delete.png';
+import emptyCookImg from '../../assets/no_recipes.png';
 import { isIngredientMissing } from '../../utils/pantry';
 import { useTheme } from '../../hooks/useTheme';
 
@@ -86,14 +87,20 @@ export default function CookScreen() {
     );
   };
 
+  const showEmptyState = sortedRecipes.length === 0;
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Your Saved Recipes</Text>
 
-      {sortedRecipes.length === 0 ? (
-        <Text style={styles.emptyText}>
-          You haven't saved any recipes yet.
-        </Text>
+      {showEmptyState ? (
+        <View style={styles.emptyContainer}>
+          <Image source={emptyCookImg} style={styles.emptyImage} />
+          <Text style={styles.emptyTitle}>No Recipes Saved</Text>
+          <Text style={styles.emptySubtitle}>
+            Start adding your favorite recipes and keep them handy for cooking!
+          </Text>
+        </View>
       ) : (
         <FlatList
           data={sortedRecipes}

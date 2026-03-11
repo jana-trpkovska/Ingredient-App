@@ -46,7 +46,6 @@ export default function EditProfileScreen({ navigation }: any) {
     try {
       updateUser(updatedUser);
       setCurrentUser(updatedUser);
-      Alert.alert('Success', 'Profile updated successfully');
       navigation.goBack();
     } catch (error) {
       Alert.alert('Error', 'Failed to update profile');

@@ -79,4 +79,29 @@ export const createStyles = (theme: Theme) =>
       fontSize: 16,
       fontWeight: '600',
     },
+    emptyContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginTop: 50,
+      paddingHorizontal: 40,
+    },
+    emptyImage: {
+      width: 250,
+      height: 250,
+      resizeMode: 'contain',
+      marginBottom: 20,
+    },
+    emptyTitle: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: theme.textPrimary,
+      marginBottom: 8,
+      textAlign: 'center',
+    },
+    emptySubtitle: {
+      fontSize: 14,
+      color: theme.textSecondary,
+      textAlign: 'center',
+      lineHeight: 20,
+    },
 });

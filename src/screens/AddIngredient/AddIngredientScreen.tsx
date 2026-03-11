@@ -126,8 +126,6 @@ export default function AddIngredientScreen() {
     navigation.goBack();
   };
 
-  const isSubmitDisabled = !name.trim() || !category;
-
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <KeyboardAvoidingView
@@ -221,7 +219,6 @@ export default function AddIngredientScreen() {
             <TouchableOpacity
               style={[styles.primaryButton, { marginTop: 20 }]}
               onPress={handleSubmit}
-              disabled={isSubmitDisabled}
             >
               <Text style={styles.primaryButtonText}>Save</Text>
             </TouchableOpacity>

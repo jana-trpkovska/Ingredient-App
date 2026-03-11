@@ -23,6 +23,7 @@ interface RecipeStore {
   isRecipeSaved: (recipeId: number) => boolean;
   getRecipeDetailsById: (id: number) => Promise<DetailedRecipe | null>;
   clearApiMessage: () => void;
+  clearSearchResults: () => void;
 }
 
 export const useRecipeStore = create<RecipeStore>((set, get) => ({
@@ -72,7 +73,7 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
     set({ apiMessage: null });
   },
 
-  removeRecipe: (recipeId) => {
+  removeRecipe: (recipeId: number) => {
     const user = useUserStore.getState().currentUser;
     if (!user) return;
 
@@ -80,7 +81,7 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
     get().fetchSavedRecipes();
   },
 
-  isRecipeSaved: (recipeId) => {
+  isRecipeSaved: (recipeId: number) => {
     return get().savedRecipes.some((r) => r.id === recipeId);
   },
 
@@ -94,4 +95,6 @@ export const useRecipeStore = create<RecipeStore>((set, get) => ({
   },
 
   clearApiMessage: () => set({ apiMessage: null }),
+
+  clearSearchResults: () => set({ searchResults: [] }),
 }));

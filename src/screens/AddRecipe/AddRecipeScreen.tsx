@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
 import { useIngredientStore } from "../../store/ingredientStore";
 import { useRecipeStore } from "../../store/recipeStore";
@@ -7,16 +7,19 @@ import { IngredientSearchRecipe } from "../../types/recipe";
 import { createStyles } from "./AddRecipe.styles";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../hooks/useTheme";
+import noIngredientsLight from "../../assets/no_select_ingredients_light.png";
+import noIngredientsDark from "../../assets/no_select_ingredients_dark.png";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function AddRecipeScreen({ navigation }: any) {
   const { ingredients } = useIngredientStore();
-  const { searchRecipes, searchResults, saveRecipe, isRecipeSaved, removeRecipe, apiMessage, clearApiMessage } = useRecipeStore();
+  const { searchRecipes, searchResults, saveRecipe, isRecipeSaved, removeRecipe, apiMessage, clearApiMessage, clearSearchResults } = useRecipeStore();
   const { currentUser } = useUserStore();
 
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [showNoIngredientsMessage, setShowNoIngredientsMessage] = useState(false);
 
-  const { theme } = useTheme();
+  const { theme, isDark } = useTheme();
   const styles = createStyles(theme);
 
   const toggleIngredient = (name: string) => {
@@ -44,6 +47,15 @@ export default function AddRecipeScreen({ navigation }: any) {
       return () => clearTimeout(timer);
     }
   }, [apiMessage]);
+
+  useFocusEffect(
+    useCallback(() => {
+      clearApiMessage();
+      clearSearchResults();
+      setSelectedIngredients([]);
+      setShowNoIngredientsMessage(false);
+    }, [])
+  );
 
   const renderIngredient = ({ item }: any) => {
     const selected = selectedIngredients.includes(item.name);
@@ -86,7 +98,7 @@ export default function AddRecipeScreen({ navigation }: any) {
             Used: {item.usedIngredientCount} | Missing: {item.missedIngredientCount}
           </Text>
           <TouchableOpacity
-            style={[styles.saveButton, saved && styles.saveButtonSaved]}
+            style={[styles.saveButton]}
             onPress={() => (saved ? removeRecipe(item.id) : saveRecipe(item.id))}
           >
             <Ionicons
@@ -100,6 +112,9 @@ export default function AddRecipeScreen({ navigation }: any) {
       </TouchableOpacity>
     );
   };
+
+  const showEmptyState = ingredients.length === 0;
+  const noIngredientsImg = isDark ? noIngredientsDark : noIngredientsLight;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -124,6 +139,16 @@ export default function AddRecipeScreen({ navigation }: any) {
         </Text>
       )}
 
+      {showEmptyState && (
+        <View style={styles.emptyContainer}>
+          <Image source={noIngredientsImg} style={styles.emptyImage} />
+          <Text style={styles.emptyTitle}>No Ingredients Added</Text>
+          <Text style={styles.emptySubtitle}>
+            Start adding ingredients to search for recipes easily!
+          </Text>
+        </View>
+      )}
+
       <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
         <Text style={styles.searchButtonText}>Search Recipes</Text>
       </TouchableOpacity>
@@ -137,9 +162,7 @@ export default function AddRecipeScreen({ navigation }: any) {
       <Text style={styles.sectionTitle}>Results</Text>
 
       {apiMessage ? (
-        <Text
-          style={[styles.emptyText, { color: theme.danger, textAlign: "center" }]}
-        >
+        <Text style={[styles.emptyText, { color: theme.danger, textAlign: "center" }]}>
           {apiMessage}
         </Text>
       ) : searchResults.length === 0 ? (

@@ -14,7 +14,6 @@ export const createStyles = (theme: Theme) =>
       marginBottom: spacing.sm,
       color: theme.textPrimary,
     },
-
     ingredientListContainer: {
       maxHeight: 300,
       marginBottom: spacing.md,
@@ -101,7 +100,6 @@ export const createStyles = (theme: Theme) =>
       alignItems: 'center',
       marginTop: spacing.sm,
     },
-    saveButtonSaved: {},
     saveButtonText: {
       marginLeft: spacing.sm,
       color: theme.textSecondary,
@@ -117,5 +115,30 @@ export const createStyles = (theme: Theme) =>
       fontSize: 14,
       marginTop: 5,
       textAlign: 'center',
+    },
+    emptyContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginVertical: 30,
+      paddingHorizontal: 40,
+    },
+    emptyImage: {
+      width: 100,
+      height: 100,
+      resizeMode: 'contain',
+      marginBottom: 20,
+    },
+    emptyTitle: {
+      fontSize: 18,
+      fontWeight: '600',
+      color: theme.textPrimary,
+      marginBottom: 8,
+      textAlign: 'center',
+    },
+    emptySubtitle: {
+      fontSize: 14,
+      color: theme.textSecondary,
+      textAlign: 'center',
+      lineHeight: 20,
     },
 });
