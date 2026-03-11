@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useIngredientStore } from '../../store/ingredientStore';
 import { createStyles } from './IngredientDetails.styles';
-import placeholderImage from '../../assets/placeholder_ingredient.png'
+import placeholderImage from '../../../assets/images/placeholder_ingredient.png'
 import { useTheme } from '../../hooks/useTheme';
 
 export default function IngredientDetailsScreen() {

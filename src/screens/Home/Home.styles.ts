@@ -1,30 +1,29 @@
 import { StyleSheet } from 'react-native';
-import { spacing } from '../../themes/spacing';
 import type { Theme } from '../../types/Theme';
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      paddingHorizontal: spacing.lg,
-      paddingTop: spacing.lg,
+      paddingHorizontal: 24,
+      paddingTop: 24,
       backgroundColor: theme.background,
     },
 
     title: {
       fontSize: 24,
-      marginBottom: spacing.md,
+      marginBottom: 16,
       color: theme.textPrimary,
       fontWeight: '600',
     },
 
     categoryContainer: {
-      paddingBottom: spacing.xl,
+      paddingBottom: 40,
     },
 
     categoryItem: {
       alignItems: 'center',
-      marginRight: spacing.md,
+      marginRight: 16,
     },
 
     categoryImage: {
@@ -56,17 +55,17 @@ export const createStyles = (theme: Theme) =>
     message: {
       fontSize: 16,
       color: theme.textSecondary,
-      marginTop: spacing.lg,
+      marginTop: 24,
       textAlign: 'center',
     },
 
     fixedButton: {
       position: 'absolute',
       bottom: 16,
-      left: spacing.lg,
-      right: spacing.lg,
+      left: 24,
+      right: 24,
       backgroundColor: theme.primary,
-      paddingVertical: spacing.md,
+      paddingVertical: 16,
       borderRadius: 8,
       alignItems: 'center',
     },
@@ -80,7 +79,7 @@ export const createStyles = (theme: Theme) =>
     contentWrapper: {
       justifyContent: 'flex-start',
       alignItems: 'center',
-      paddingTop: spacing.md,
+      paddingTop: 16,
       paddingBottom: 140,
     },
 

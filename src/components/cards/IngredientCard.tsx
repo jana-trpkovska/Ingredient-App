@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { Ingredient } from '../types/ingredient';
-import { spacing } from '../themes/spacing';
-import { useIngredientStore } from '../store/ingredientStore';
-import deleteImage from '../assets/delete.png';
-import placeholderImage from '../assets/placeholder_ingredient.png';
-import { useTheme } from '../hooks/useTheme';
-import CustomAlert from '../components/modals/CustomAlert/CustomAlert';
+import { Ingredient } from '../../types/ingredient';
+import { useIngredientStore } from '../../store/ingredientStore';
+import deleteImage from '../../../assets/images/delete.png';
+import placeholderImage from '../../../assets/images/placeholder_ingredient.png';
+import { useTheme } from '../../hooks/useTheme';
+import CustomAlert from '../modals/CustomAlert/CustomAlert';
 
 interface Props {
   ingredient: Ingredient;
@@ -31,8 +30,8 @@ const IngredientCard = ({ ingredient, onPress }: Props) => {
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          padding: spacing.md,
-          marginBottom: spacing.md,
+          padding: 16,
+          marginBottom: 16,
           borderRadius: 12,
           backgroundColor: theme.cardBackground,
           shadowColor: theme.textPrimary,
@@ -50,7 +49,7 @@ const IngredientCard = ({ ingredient, onPress }: Props) => {
             justifyContent: 'center',
             alignItems: 'center',
             overflow: 'hidden',
-            marginRight: spacing.md,
+            marginRight: 16,
           }}
         >
           <Image
@@ -91,7 +90,7 @@ const IngredientCard = ({ ingredient, onPress }: Props) => {
         <TouchableOpacity
           onPress={handleDelete}
           style={{
-            padding: spacing.sm,
+            padding: 8,
           }}
         >
           <Image

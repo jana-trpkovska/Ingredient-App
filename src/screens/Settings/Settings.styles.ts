@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { spacing } from '../../themes/spacing';
 import type { Theme } from '../../types/Theme';
 
 export const createStyles = (theme: Theme) =>
@@ -7,20 +6,20 @@ export const createStyles = (theme: Theme) =>
     container: {
       flex: 1,
       backgroundColor: theme.background,
-      paddingHorizontal: spacing.md,
-      paddingTop: spacing.lg,
+      paddingHorizontal: 16,
+      paddingTop: 24,
     },
 
     title: {
       fontSize: 24,
       fontWeight: '700',
       color: theme.textPrimary,
-      marginBottom: spacing.lg,
+      marginBottom: 24,
       alignSelf: 'center',
     },
 
     section: {
-      marginBottom: spacing.lg,
+      marginBottom: 24,
     },
 
     sectionTitle: {

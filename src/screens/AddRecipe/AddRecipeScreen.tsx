@@ -1,15 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, TouchableOpacity, Image, ScrollView } from "react-native";
+import { ScrollView, View, Text, TouchableOpacity, Image } from "react-native";
 import { useIngredientStore } from "../../store/ingredientStore";
 import { useRecipeStore } from "../../store/recipeStore";
 import { useUserStore } from "../../store/userStore";
-import { IngredientSearchRecipe } from "../../types/recipe";
-import { createStyles } from "./AddRecipe.styles";
-import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../hooks/useTheme";
-import noIngredientsLight from "../../assets/no_select_ingredients_light.png";
-import noIngredientsDark from "../../assets/no_select_ingredients_dark.png";
 import { useFocusEffect } from "@react-navigation/native";
+import { createStyles } from "./AddRecipe.styles";
+
+import SelectableIngredientCard from "../../components/cards/SelectableIngredientCard/SelectableIngredientCard";
+import SearchResultRecipeCard from "../../components/cards/SearchResultRecipeCard/SearchResultRecipeCard";
+
+import noIngredientsLight from "../../../assets/images/no_select_ingredients_light.png";
+import noIngredientsDark from "../../../assets/images/no_select_ingredients_dark.png";
 
 export default function AddRecipeScreen({ navigation }: any) {
   const { ingredients } = useIngredientStore();
@@ -23,10 +25,9 @@ export default function AddRecipeScreen({ navigation }: any) {
   const styles = createStyles(theme);
 
   const toggleIngredient = (name: string) => {
-    setSelectedIngredients((prev) =>
-      prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name]
+    setSelectedIngredients(prev =>
+      prev.includes(name) ? prev.filter(i => i !== name) : [...prev, name]
     );
-
     if (selectedIngredients.length === 0) setShowNoIngredientsMessage(false);
   };
 
@@ -36,7 +37,6 @@ export default function AddRecipeScreen({ navigation }: any) {
       return;
     }
     setShowNoIngredientsMessage(false);
-
     if (currentUser?.diet?.trim()) searchRecipes(selectedIngredients, true);
     else searchRecipes(selectedIngredients);
   };
@@ -57,62 +57,6 @@ export default function AddRecipeScreen({ navigation }: any) {
     }, [])
   );
 
-  const renderIngredient = ({ item }: any) => {
-    const selected = selectedIngredients.includes(item.name);
-    return (
-      <TouchableOpacity
-        style={[styles.ingredientOptionCard, selected && styles.ingredientOptionCardSelected]}
-        onPress={() => toggleIngredient(item.name)}
-      >
-        <Image
-          source={
-            item.image
-              ? { uri: item.image }
-              : require("../../assets/placeholder_ingredient.png")
-          }
-          style={styles.ingredientOptionImage}
-        />
-        <Text
-          style={[
-            styles.ingredientOptionText,
-            selected && styles.ingredientOptionTextSelected,
-          ]}
-        >
-          {item.name}
-        </Text>
-      </TouchableOpacity>
-    );
-  };
-
-  const renderRecipe = ({ item }: { item: IngredientSearchRecipe }) => {
-    const saved = isRecipeSaved(item.id);
-    return (
-      <TouchableOpacity
-        style={styles.recipeCard}
-        onPress={() => navigation.navigate("DetailedRecipe", { recipeId: item.id })}
-      >
-        {item.image && <Image source={{ uri: item.image }} style={styles.recipeImage} />}
-        <View style={styles.recipeInfo}>
-          <Text style={styles.recipeTitle}>{item.title}</Text>
-          <Text style={styles.recipeSubtitle}>
-            Used: {item.usedIngredientCount} | Missing: {item.missedIngredientCount}
-          </Text>
-          <TouchableOpacity
-            style={[styles.saveButton]}
-            onPress={() => (saved ? removeRecipe(item.id) : saveRecipe(item.id))}
-          >
-            <Ionicons
-              name={saved ? "heart" : "heart-outline"}
-              size={20}
-              color={saved ? theme.danger : theme.textSecondary}
-            />
-            <Text style={styles.saveButtonText}>{saved ? "Saved" : "Save"}</Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    );
-  };
-
   const showEmptyState = ingredients.length === 0;
   const noIngredientsImg = isDark ? noIngredientsDark : noIngredientsLight;
 
@@ -127,8 +71,14 @@ export default function AddRecipeScreen({ navigation }: any) {
           showsVerticalScrollIndicator
           nestedScrollEnabled
         >
-          {ingredients.map((item) => (
-            <View key={item.id}>{renderIngredient({ item })}</View>
+          {ingredients.map(item => (
+            <SelectableIngredientCard
+              key={item.id}
+              name={item.name}
+              image={item.image}
+              selected={selectedIngredients.includes(item.name)}
+              onPress={() => toggleIngredient(item.name)}
+            />
           ))}
         </ScrollView>
       </View>
@@ -162,15 +112,23 @@ export default function AddRecipeScreen({ navigation }: any) {
       <Text style={styles.sectionTitle}>Results</Text>
 
       {apiMessage ? (
-        <Text style={[styles.emptyText, { color: theme.danger, textAlign: "center" }]}>
+        <Text style={[styles.emptyText, { color: theme.danger, textAlign: 'center' }]}>
           {apiMessage}
         </Text>
       ) : searchResults.length === 0 ? (
         <Text style={styles.emptyText}>No recipes found. Try searching!</Text>
       ) : (
         <View style={styles.recipeList}>
-          {searchResults.map((item) => (
-            <View key={item.id}>{renderRecipe({ item })}</View>
+          {searchResults.map(item => (
+            <SearchResultRecipeCard
+              key={item.id}
+              recipe={item}
+              saved={isRecipeSaved(item.id)}
+              onToggleSave={() =>
+                isRecipeSaved(item.id) ? removeRecipe(item.id) : saveRecipe(item.id)
+              }
+              onPress={() => navigation.navigate("DetailedRecipe", { recipeId: item.id })}
+            />
           ))}
         </View>
       )}

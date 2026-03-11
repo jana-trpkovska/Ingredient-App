@@ -4,8 +4,7 @@ import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useIngredientStore } from '../../store/ingredientStore';
 import { useUserStore } from '../../store/userStore';
-import { IngredientCategory } from '../../types/ingredientCategory';
-import { IngredientUnit } from '../../types/ingredientUnit';
+import { IngredientCategory, IngredientUnit } from '../../types/ingredient';
 import * as ImagePicker from 'expo-image-picker';
 import { createStyles } from './AddIngredient.styles';
 import { useTheme } from '../../hooks/useTheme';

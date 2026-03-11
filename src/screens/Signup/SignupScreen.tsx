@@ -6,7 +6,7 @@ import { addUser } from '../../services/userService';
 import { User } from '../../types/user';
 import { v4 as uuidv4 } from 'uuid';
 import { createStyles } from '../../themes/auth.styles';
-import icon from '../../../assets/icon.png';
+import icon from '../../../assets/images/icon.png';
 import { useTheme } from '../../hooks/useTheme';
 import CustomAlert from '../../components/modals/CustomAlert/CustomAlert';
 

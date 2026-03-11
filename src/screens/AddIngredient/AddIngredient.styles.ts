@@ -1,12 +1,11 @@
 import { StyleSheet } from 'react-native';
-import { spacing } from '../../themes/spacing';
 import type { Theme } from '../../types/Theme';
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
     container: {
       flex: 1,
-      padding: spacing.lg,
+      padding: 24,
       backgroundColor: theme.background,
       alignItems: 'center',
     },
@@ -21,8 +20,8 @@ export const createStyles = (theme: Theme) =>
       fontWeight: '500',
       color: theme.textPrimary,
       alignSelf: 'flex-start',
-      marginTop: spacing.md,
-      marginBottom: spacing.sm,
+      marginTop: 16,
+      marginBottom: 8,
     },
     inputContainer: {
       flexDirection: 'row',
@@ -32,22 +31,22 @@ export const createStyles = (theme: Theme) =>
     },
     input: {
       flex: 1,
-      paddingVertical: spacing.sm,
+      paddingVertical: 8,
       fontSize: 16,
       color: theme.textPrimary,
     },
     primaryButton: {
       width: '100%',
       backgroundColor: theme.primary,
-      paddingVertical: spacing.md,
-      paddingHorizontal: spacing.lg,
+      paddingVertical: 16,
+      paddingHorizontal: 24,
       borderRadius: 6,
       alignItems: 'center',
     },
     secondaryButton: {
       backgroundColor: theme.secondary,
-      paddingVertical: spacing.md,
-      paddingHorizontal: spacing.lg,
+      paddingVertical: 16,
+      paddingHorizontal: 24,
       borderRadius: 6,
       alignItems: 'center',
     },
@@ -60,14 +59,14 @@ export const createStyles = (theme: Theme) =>
       width: '100%',
       height: 200,
       borderRadius: 8,
-      marginTop: spacing.md,
+      marginTop: 16,
     },
     pickerContainer: {
       flex: 1,
       borderWidth: 1,
       borderColor: theme.border,
       borderRadius: 8,
-      marginBottom: spacing.lg,
+      marginBottom: 24,
       justifyContent: 'center',
     },
   });

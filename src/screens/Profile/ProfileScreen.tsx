@@ -2,8 +2,8 @@ import React, { useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { useUserStore } from '../../store/userStore';
 import { createStyles } from './Profile.styles';
-import userIconLight from '../../assets/avatar.png';
-import userIconDark from '../../assets/avatar_dark_mode.png'
+import userIconLight from '../../../assets/images/avatar.png';
+import userIconDark from '../../../assets/images/avatar_dark_mode.png'
 import { useTheme } from '../../hooks/useTheme';
 
 export default function ProfileScreen({ navigation }: any) {

@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native';
-import IngredientCard from '../../components/IngredientCard';
+import IngredientCard from '../../components/cards/IngredientCard';
 import { useIngredientStore } from '../../store/ingredientStore';
 import { useUserStore } from '../../store/userStore';
 import { createStyles } from './Home.styles';
-import { IngredientCategory } from '../../types/ingredientCategory';
+import { IngredientCategory } from '../../types/ingredient';
 import { useTheme } from '../../hooks/useTheme';
-import emptyStateImgLight from '../../assets/home_empty_state_light.png';
-import emptyStateImgDark from '../../assets/home_empty_state_dark.png';
-import noIngredientsImg from '../../assets/no_ingredients.png';
+import emptyStateImgLight from '../../../assets/images/home_empty_state_light.png';
+import emptyStateImgDark from '../../../assets/images/home_empty_state_dark.png';
+import noIngredientsImg from '../../../assets/images/no_ingredients.png';
 
 const CATEGORY_FILTERS = [
-  { label: IngredientCategory.PRODUCE, image: require('../../assets/produce.png') },
-  { label: IngredientCategory.PROTEIN, image: require('../../assets/protein.png') },
-  { label: IngredientCategory.DAIRY, image: require('../../assets/dairy.png') },
-  { label: IngredientCategory.GRAINS, image: require('../../assets/grains.png') },
-  { label: IngredientCategory.SWEETS, image: require('../../assets/sweets.png') },
-  { label: IngredientCategory.OTHER, image: require('../../assets/other_ingredients.png') },
+  { label: IngredientCategory.PRODUCE, image: require('../../../assets/images/produce.png') },
+  { label: IngredientCategory.PROTEIN, image: require('../../../assets/images/protein.png') },
+  { label: IngredientCategory.DAIRY, image: require('../../../assets/images/dairy.png') },
+  { label: IngredientCategory.GRAINS, image: require('../../../assets/images/grains.png') },
+  { label: IngredientCategory.SWEETS, image: require('../../../assets/images/sweets.png') },
+  { label: IngredientCategory.OTHER, image: require('../../../assets/images/other_ingredients.png') },
 ];
 
 export default function HomeScreen({ navigation }: any) {

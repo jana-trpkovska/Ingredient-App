@@ -1,13 +1,13 @@
-import React, { useMemo } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { useIngredientStore } from '../../store/ingredientStore';
-import { useRecipeStore } from '../../store/recipeStore';
-import { createStyles } from './Cook.styles';
-import deleteIcon from '../../assets/delete.png';
-import emptyCookImg from '../../assets/no_recipes.png';
-import { isIngredientMissing } from '../../utils/pantry';
-import { useTheme } from '../../hooks/useTheme';
+import React, { useMemo } from "react";
+import { View, Text, FlatList, TouchableOpacity, Image } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { useIngredientStore } from "../../store/ingredientStore";
+import { useRecipeStore } from "../../store/recipeStore";
+import { createStyles } from "./Cook.styles";
+import { isIngredientMissing } from "../../utils/pantry";
+import { useTheme } from "../../hooks/useTheme";
+import CookRecipeCard from "../../components/cards/CookRecipeCard/CookRecipeCard";
+import emptyCookImg from "../../../assets/images/no_recipes.png";
 
 export default function CookScreen() {
   const navigation = useNavigation<any>();
@@ -24,68 +24,21 @@ export default function CookScreen() {
 
   const isCookable = (recipe: any) => {
     if (!recipe || !Array.isArray(recipe.extendedIngredients)) return false;
-
-    const missingIngredients = recipe.extendedIngredients.filter(
-      (ing: any) => isIngredientMissing(ing.name, userPantryNames)
+    const missing = recipe.extendedIngredients.filter((ing: any) =>
+      isIngredientMissing(ing.name, userPantryNames)
     );
-
-    return missingIngredients.length === 0;
+    return missing.length === 0;
   };
 
   const sortedRecipes = useMemo(() => {
     if (!Array.isArray(savedRecipes)) return [];
-
     const validRecipes = savedRecipes.filter(Boolean);
-    const cookable = validRecipes.filter((r) => isCookable(r));
+    const cookable = validRecipes.filter(isCookable);
     const notCookable = validRecipes.filter((r) => !isCookable(r));
-
     cookable.sort((a, b) => a.title.localeCompare(b.title));
     notCookable.sort((a, b) => a.title.localeCompare(b.title));
-
     return [...cookable, ...notCookable];
   }, [savedRecipes, userPantryNames]);
-
-  const renderRecipe = ({ item }: any) => {
-    const cookable = isCookable(item);
-
-    return (
-      <TouchableOpacity
-        style={[styles.recipeCard, !cookable && styles.recipeCardDisabled]}
-        onPress={() =>
-          navigation.navigate('DetailedRecipe', { recipeId: item.id })
-        }
-      >
-        {item.image && (
-          <Image
-            source={{ uri: item.image }}
-            style={[styles.recipeImage, !cookable && { opacity: 0.4 }]}
-          />
-        )}
-
-        <View style={styles.recipeInfo}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <View style={{ flex: 1, marginRight: 8 }}>
-              <Text
-                style={[styles.recipeTitle, !cookable && { color: theme.textSecondary }]}
-                numberOfLines={1}
-                ellipsizeMode="tail"
-              >
-                {item.title}
-              </Text>
-            </View>
-
-            <TouchableOpacity onPress={() => removeRecipe(item.id)}>
-              <Image source={deleteIcon} style={{ width: 20, height: 20 }} />
-            </TouchableOpacity>
-          </View>
-
-          {!cookable && (
-            <Text style={styles.missingText}>Missing ingredients</Text>
-          )}
-        </View>
-      </TouchableOpacity>
-    );
-  };
 
   const showEmptyState = sortedRecipes.length === 0;
 
@@ -105,7 +58,15 @@ export default function CookScreen() {
         <FlatList
           data={sortedRecipes}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={renderRecipe}
+          renderItem={({ item }) => (
+            <CookRecipeCard
+              title={item.title}
+              image={item.image}
+              cookable={isCookable(item)}
+              onPress={() => navigation.navigate("DetailedRecipe", { recipeId: item.id })}
+              onRemove={() => removeRecipe(item.id)}
+            />
+          )}
           contentContainerStyle={styles.listContent}
           showsVerticalScrollIndicator={false}
         />
@@ -113,9 +74,7 @@ export default function CookScreen() {
 
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() =>
-          navigation.navigate('MainTabs', { screen: 'Add Recipe' })
-        }
+        onPress={() => navigation.navigate("MainTabs", { screen: "Add Recipe" })}
       >
         <Text style={styles.addButtonText}>Add New Recipe</Text>
       </TouchableOpacity>

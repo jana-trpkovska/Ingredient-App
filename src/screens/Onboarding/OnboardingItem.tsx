@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, Dimensions } from 'react-native';
+import { View, Dimensions } from 'react-native';
 import Animated, { FadeInUp } from 'react-native-reanimated';
 import { useTheme } from '../../hooks/useTheme';
 import { OnboardingItemData } from './onboardingData';

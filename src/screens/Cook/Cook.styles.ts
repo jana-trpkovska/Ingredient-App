@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { spacing } from '../../themes/spacing';
 import type { Theme } from '../../types/Theme';
 
 export const createStyles = (theme: Theme) =>
@@ -7,62 +6,21 @@ export const createStyles = (theme: Theme) =>
     container: {
       flex: 1,
       backgroundColor: theme.background,
-      paddingHorizontal: spacing.md,
-      paddingTop: spacing.lg,
+      paddingHorizontal: 16,
+      paddingTop: 24,
     },
 
     title: {
       fontSize: 22,
       fontWeight: '700',
       color: theme.textPrimary,
-      marginBottom: spacing.md,
+      marginBottom: 16,
     },
 
     listContent: {
       paddingBottom: 100,
     },
-
-    recipeCard: {
-      backgroundColor: theme.cardBackground,
-      borderRadius: 14,
-      marginBottom: spacing.md,
-      overflow: 'hidden',
-      elevation: 2,
-    },
-
-    recipeCardDisabled: {
-      backgroundColor: theme.secondaryBackground,
-    },
-
-    recipeImage: {
-      width: '100%',
-      height: 160,
-    },
-
-    recipeInfo: {
-      padding: spacing.md,
-      backgroundColor: theme.cardBackground,
-    },
-
-    recipeTitle: {
-      fontSize: 16,
-      fontWeight: '600',
-      color: theme.textPrimary,
-    },
-
-    missingText: {
-      marginTop: 6,
-      fontSize: 13,
-      color: theme.textSecondary,
-    },
-
-    emptyText: {
-      textAlign: 'center',
-      marginTop: 40,
-      fontSize: 15,
-      color: theme.textSecondary,
-    },
-
+    
     addButton: {
       position: 'absolute',
       bottom: 30,

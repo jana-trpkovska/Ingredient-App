@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { spacing } from '../../themes/spacing';
 import { Theme } from '../../types/Theme';
 
 export const createStyles = (theme: Theme) =>
@@ -32,10 +31,10 @@ export const createStyles = (theme: Theme) =>
     },
     infoCard: {
       marginTop: -30,
-      marginHorizontal: spacing.lg,
+      marginHorizontal: 24,
       backgroundColor: theme.cardBackground,
       borderRadius: 16,
-      padding: spacing.lg,
+      padding: 24,
       shadowColor: theme.textPrimary,
       shadowOpacity: 0.05,
       shadowRadius: 8,
@@ -45,12 +44,12 @@ export const createStyles = (theme: Theme) =>
       fontSize: 24,
       fontWeight: '700',
       color: theme.textPrimary,
-      marginBottom: spacing.lg,
+      marginBottom: 24,
     },
     row: {
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginBottom: spacing.md,
+      marginBottom: 16,
     },
     label: {
       fontSize: 14,
@@ -62,18 +61,18 @@ export const createStyles = (theme: Theme) =>
       color: theme.textPrimary,
     },
     buttonContainer: {
-      paddingHorizontal: spacing.lg,
-      paddingTop: spacing.md,
-      paddingBottom: spacing.xxl,
+      paddingHorizontal: 24,
+      paddingTop: 16,
+      paddingBottom: 80,
       backgroundColor: theme.background,
     },
     primaryButton: {
       width: '100%',
       backgroundColor: theme.primary,
-      paddingVertical: spacing.md,
+      paddingVertical: 16,
       borderRadius: 8,
       alignItems: 'center',
-      marginBottom: spacing.md,
+      marginBottom: 16,
     },
     primaryButtonText: {
       color: theme.surface,
@@ -84,7 +83,7 @@ export const createStyles = (theme: Theme) =>
       width: '100%',
       borderWidth: 1,
       borderColor: theme.primary,
-      paddingVertical: spacing.md,
+      paddingVertical: 16,
       borderRadius: 8,
       alignItems: 'center',
       backgroundColor: theme.background,
@@ -97,6 +96,6 @@ export const createStyles = (theme: Theme) =>
     message: {
       fontSize: 16,
       color: theme.textSecondary,
-      marginTop: spacing.md,
+      marginTop: 16,
     },
 });

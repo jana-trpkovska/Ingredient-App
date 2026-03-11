@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useUserStore } from '../../store/userStore';
 import { getUserByUsername } from '../../services/userService';
 import { createStyles } from '../../themes/auth.styles';
-import icon from '../../../assets/icon.png';
+import icon from '../../../assets/images/icon.png';
 import { useTheme } from '../../hooks/useTheme';
 import CustomAlert from '../../components/modals/CustomAlert/CustomAlert';
 

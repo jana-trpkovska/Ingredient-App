@@ -8,12 +8,11 @@ import CookScreen from '../screens/Cook/CookScreen';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
 import AddRecipeScreen from '../screens/AddRecipe/AddRecipeScreen';
 
-import homeIcon from '../assets/home.png';
-import cookingIcon from '../assets/cooking.png';
-import settingsIcon from '../assets/setting.png';
-import recipesIcon from '../assets/recipe.png';
+import homeIcon from '../../assets/images/home.png';
+import cookingIcon from '../../assets/images/cooking.png';
+import settingsIcon from '../../assets/images/setting.png';
+import recipesIcon from '../../assets/images/recipe.png';
 
-import { spacing } from '../themes/spacing';
 import { useTheme } from '../hooks/useTheme';
 
 const Tab = createBottomTabNavigator();
@@ -31,7 +30,7 @@ export default function TabNavigator({ setOnboardingSeen }: any) {
         tabBarStyle: {
           backgroundColor: theme.bottomNavColor,
           height: 60 + insets.bottom,
-          paddingBottom: spacing.sm + insets.bottom,
+          paddingBottom: 8 + insets.bottom,
         },
       }}
     >

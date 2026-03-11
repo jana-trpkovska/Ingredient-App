@@ -3,8 +3,8 @@ import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, S
 import { useUserStore } from '../../store/userStore';
 import { updateUser } from '../../services/userService';
 import { createStyles } from './EditProfile.styles';
-import userIconLight from '../../assets/avatar.png';
-import userIconDark from '../../assets/avatar_dark_mode.png';
+import userIconLight from '../../../assets/images/avatar.png';
+import userIconDark from '../../../assets/images/avatar_dark_mode.png';
 import { Diet } from '../../types/diet';
 import { useTheme } from '../../hooks/useTheme';
 import CustomAlert from '../../components/modals/CustomAlert/CustomAlert';

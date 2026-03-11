@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { spacing } from '../../themes/spacing';
 import type { Theme } from '../../types/Theme';
 
 export const createStyles = (theme: Theme) =>
@@ -37,8 +36,8 @@ export const createStyles = (theme: Theme) =>
     title: {
       fontSize: 22,
       fontWeight: '700',
-      marginTop: spacing.md,
-      marginBottom: spacing.md,
+      marginTop: 16,
+      marginBottom: 16,
       color: theme.textPrimary,
     },
 
@@ -46,8 +45,8 @@ export const createStyles = (theme: Theme) =>
       width: '90%',
       backgroundColor: theme.cardBackground,
       borderRadius: 16,
-      padding: spacing.lg,
-      marginBottom: spacing.lg,
+      padding: 24,
+      marginBottom: 24,
 
       shadowColor: theme.textPrimary,
       shadowOpacity: 0.08,
@@ -65,20 +64,20 @@ export const createStyles = (theme: Theme) =>
 
     input: {
       fontSize: 16,
-      paddingVertical: spacing.sm,
+      paddingVertical: 8,
       color: theme.textPrimary,
     },
 
     divider: {
       height: 1,
       backgroundColor: theme.secondaryBackground,
-      marginVertical: spacing.md,
+      marginVertical: 16,
     },
 
     primaryButton: {
       width: '90%',
       backgroundColor: theme.primary,
-      paddingVertical: spacing.md,
+      paddingVertical: 16,
       borderRadius: 12,
       alignItems: 'center',
     },

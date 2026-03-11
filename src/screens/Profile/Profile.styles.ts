@@ -1,5 +1,4 @@
 import { StyleSheet } from "react-native";
-import { spacing } from "../../themes/spacing";
 import type { Theme } from '../../types/Theme';
 
 export const createStyles = (theme: Theme) =>
@@ -36,22 +35,22 @@ export const createStyles = (theme: Theme) =>
     name: {
       fontSize: 22,
       fontWeight: '700',
-      marginTop: spacing.md,
+      marginTop: 16,
       color: theme.textPrimary,
     },
 
     username: {
       fontSize: 14,
       color: theme.textSecondary,
-      marginBottom: spacing.lg,
+      marginBottom: 24,
     },
 
     infoCard: {
       width: '90%',
       backgroundColor: theme.cardBackground,
       borderRadius: 16,
-      padding: spacing.lg,
-      marginBottom: spacing.lg,
+      padding: 24,
+      marginBottom: 24,
 
       shadowColor: theme.textPrimary,
       shadowOpacity: 0.08,
@@ -80,16 +79,16 @@ export const createStyles = (theme: Theme) =>
     divider: {
       height: 1,
       backgroundColor: theme.secondaryBackground,
-      marginVertical: spacing.md,
+      marginVertical: 16,
     },
 
     primaryButton: {
       width: '90%',
       backgroundColor: theme.primary,
-      paddingVertical: spacing.md,
+      paddingVertical: 16,
       borderRadius: 12,
       alignItems: 'center',
-      marginBottom: spacing.md,
+      marginBottom: 16,
     },
 
     primaryButtonText: {
@@ -103,10 +102,10 @@ export const createStyles = (theme: Theme) =>
       borderWidth: 1,
       borderColor: theme.primary,
       backgroundColor: theme.background,
-      paddingVertical: spacing.md,
+      paddingVertical: 16,
       borderRadius: 12,
       alignItems: 'center',
-      marginTop: spacing.sm,
+      marginTop: 8,
     },
 
     logoutText: {

@@ -6,7 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import TabNavigator from './TabNavigator';
 import ProfileScreen from '../screens/Profile/ProfileScreen';
-import HeaderTitle from '../components/HeaderTitle';
+import HeaderTitle from '../components/cards/HeaderTitle';
 import LoginScreen from '../screens/Login/LoginScreen';
 import SignupScreen from '../screens/Signup/SignupScreen';
 import EditProfileScreen from '../screens/EditProfile/EditProfileScreen';
@@ -15,8 +15,7 @@ import IngredientDetailsScreen from '../screens/IngredientDetails/IngredientDeta
 import DetailedRecipeScreen from '../screens/DetailedRecipe/DetailedRecipeScreen';
 import OnboardingScreen from '../screens/Onboarding/OnboardingScreen';
 
-import avatarIcon from '../assets/avatar.png';
-import { spacing } from '../themes/spacing';
+import avatarIcon from '../../assets/images/avatar.png';
 import { useTheme } from '../hooks/useTheme';
 import { useUserStore } from '../store/userStore';
 
@@ -120,7 +119,7 @@ export default function AppNavigator() {
 
 const styles = StyleSheet.create({
   avatarContainer: {
-    marginRight: spacing.md,
+    marginRight: 16,
   },
   avatar: {
     width: 22,

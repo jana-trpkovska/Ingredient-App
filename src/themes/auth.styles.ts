@@ -1,5 +1,4 @@
 import { StyleSheet } from 'react-native';
-import { spacing } from './spacing';
 import type { Theme } from '../types/Theme';
 
 export const createStyles = (theme: Theme) =>
@@ -7,14 +6,14 @@ export const createStyles = (theme: Theme) =>
     container: {
       flex: 1,
       backgroundColor: theme.background,
-      paddingHorizontal: spacing.lg,
+      paddingHorizontal: 24,
       justifyContent: 'center'
     },
     logo: {
       width: 150,
       height: 150,
       alignSelf: 'center',
-      marginBottom: spacing.xl,
+      marginBottom: 40,
       resizeMode: 'contain',
     },
     inputContainer: {
@@ -22,19 +21,19 @@ export const createStyles = (theme: Theme) =>
       alignItems: 'center',
       borderBottomWidth: 1,
       borderBottomColor: theme.border,
-      marginBottom: spacing.lg,
+      marginBottom: 24,
     },
     input: {
       flex: 1,
-      paddingVertical: spacing.sm,
+      paddingVertical: 8,
       fontSize: 16,
       color: theme.textPrimary,
     },
     primaryButton: {
       backgroundColor: theme.primary,
-      paddingVertical: spacing.md,
+      paddingVertical: 16,
       borderRadius: 6,
-      marginTop: spacing.md,
+      marginTop: 16,
       alignItems: 'center',
     },
     primaryButtonText: {
@@ -44,7 +43,7 @@ export const createStyles = (theme: Theme) =>
     },
     footerText: {
       textAlign: 'center',
-      marginTop: spacing.xl,
+      marginTop: 40,
       color: theme.textSecondary,
     },
     link: {

@@ -1,6 +1,5 @@
 import { StyleSheet } from "react-native";
 import type { Theme } from "../../../types/Theme";
-import { spacing } from "../../../themes/spacing";
 
 export const createStyles = (theme: Theme) =>
   StyleSheet.create({
@@ -14,7 +13,7 @@ export const createStyles = (theme: Theme) =>
       left: "10%",
       right: "10%",
       backgroundColor: theme.cardBackground,
-      padding: spacing.lg,
+      padding: 24,
       borderRadius: 16,
       elevation: 10,
       shadowColor: "#000",
@@ -27,23 +26,23 @@ export const createStyles = (theme: Theme) =>
       fontSize: 18,
       fontWeight: "600",
       color: theme.textPrimary,
-      marginBottom: spacing.sm,
+      marginBottom: 8,
       textAlign: "center",
     },
     message: {
       fontSize: 16,
       color: theme.textSecondary,
       textAlign: "center",
-      marginBottom: spacing.md,
+      marginBottom: 16,
     },
     button: {
       backgroundColor: theme.primary,
-      paddingVertical: spacing.sm,
-      paddingHorizontal: spacing.lg,
+      paddingVertical: 8,
+      paddingHorizontal: 24,
       borderRadius: 12,
       alignSelf: "stretch",
       alignItems: "center",
-      marginTop: spacing.sm,
+      marginTop: 8,
     },
     buttonText: {
       color: theme.surface,
