@@ -6,7 +6,7 @@ import { useIngredientStore } from '../store/ingredientStore';
 import deleteImage from '../assets/delete.png';
 import placeholderImage from '../assets/placeholder_ingredient.png';
 import { useTheme } from '../hooks/useTheme';
-import CustomAlert from '../components/modals/CustomAlert';
+import CustomAlert from '../components/modals/CustomAlert/CustomAlert';
 
 interface Props {
   ingredient: Ingredient;

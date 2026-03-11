@@ -75,11 +75,6 @@ export const createStyles = (theme: Theme) =>
       marginVertical: spacing.md,
     },
 
-    picker: {
-      width: '100%',
-      color: theme.textPrimary,
-    },
-
     primaryButton: {
       width: '90%',
       backgroundColor: theme.primary,

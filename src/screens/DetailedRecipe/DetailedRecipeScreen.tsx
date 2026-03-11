@@ -11,7 +11,7 @@ import missingIcon from '../../assets/missing.png';
 import { isIngredientMissing } from '../../utils/pantry';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../hooks/useTheme';
-import CustomAlert from '../../components/modals/CustomAlert';
+import CustomAlert from '../../components/modals/CustomAlert/CustomAlert';
 
 export default function DetailedRecipeScreen() {
   const route = useRoute<any>();

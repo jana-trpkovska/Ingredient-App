@@ -5,10 +5,10 @@ import { updateUser } from '../../services/userService';
 import { createStyles } from './EditProfile.styles';
 import userIconLight from '../../assets/avatar.png';
 import userIconDark from '../../assets/avatar_dark_mode.png';
-import { Picker } from '@react-native-picker/picker';
 import { Diet } from '../../types/diet';
 import { useTheme } from '../../hooks/useTheme';
-import CustomAlert from '../../components/modals/CustomAlert';
+import CustomAlert from '../../components/modals/CustomAlert/CustomAlert';
+import CustomSelect from '../../components/modals/CustomSelect/CustomSelect';
 
 export default function EditProfileScreen({ navigation }: any) {
   const { currentUser, setCurrentUser } = useUserStore();
@@ -81,7 +81,6 @@ export default function EditProfileScreen({ navigation }: any) {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.container}>
-
           <View style={styles.header} />
 
           <Image source={avatarSource} style={styles.avatar} />
@@ -89,9 +88,7 @@ export default function EditProfileScreen({ navigation }: any) {
           <Text style={styles.title}>Edit Profile</Text>
 
           <View style={styles.card}>
-
             <Text style={styles.label}>Full Name</Text>
-
             <TextInput
               value={fullName}
               onChangeText={setFullName}
@@ -103,27 +100,20 @@ export default function EditProfileScreen({ navigation }: any) {
             <View style={styles.divider} />
 
             <Text style={styles.label}>Diet Preference</Text>
-
-            <Picker
+            <CustomSelect
+              options={[
+                { label: 'Select diet', value: null },
+                ...Object.values(Diet).map((d) => ({ label: d, value: d })),
+              ]}
               selectedValue={diet}
-              onValueChange={(val) => setDiet(val)}
-              style={styles.picker}
-            >
-              <Picker.Item label="Select diet" value={null} />
-              {Object.values(Diet).map((d) => (
-                <Picker.Item key={d} label={d} value={d} />
-              ))}
-            </Picker>
-
+              onValueChange={setDiet}
+              placeholder="Select diet"
+            />
           </View>
 
-          <TouchableOpacity
-            style={styles.primaryButton}
-            onPress={handleSave}
-          >
+          <TouchableOpacity style={styles.primaryButton} onPress={handleSave}>
             <Text style={styles.primaryButtonText}>Save Changes</Text>
           </TouchableOpacity>
-
         </View>
       </ScrollView>
 

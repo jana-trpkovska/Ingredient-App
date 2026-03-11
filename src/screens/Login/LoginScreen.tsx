@@ -6,7 +6,7 @@ import { getUserByUsername } from '../../services/userService';
 import { createStyles } from '../../themes/auth.styles';
 import icon from '../../../assets/icon.png';
 import { useTheme } from '../../hooks/useTheme';
-import CustomAlert from '../../components/modals/CustomAlert';
+import CustomAlert from '../../components/modals/CustomAlert/CustomAlert';
 
 export default function LoginScreen({ navigation }: any) {
   const [username, setUsername] = useState('');

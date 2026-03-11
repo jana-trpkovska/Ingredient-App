@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal, View, Text, TouchableOpacity, TouchableWithoutFeedback } from "react-native";
-import { useTheme } from "../../hooks/useTheme";
+import { useTheme } from "../../../hooks/useTheme";
 import { createStyles } from "./CustomAlert.styles";
 
 interface ButtonOption {

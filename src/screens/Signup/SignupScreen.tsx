@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { createStyles } from '../../themes/auth.styles';
 import icon from '../../../assets/icon.png';
 import { useTheme } from '../../hooks/useTheme';
-import CustomAlert from '../../components/modals/CustomAlert';
+import CustomAlert from '../../components/modals/CustomAlert/CustomAlert';
 
 export default function SignupScreen({ navigation }: any) {
   const [fullName, setFullName] = useState('');

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { SafeAreaView, useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Picker } from '@react-native-picker/picker';
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { useIngredientStore } from '../../store/ingredientStore';
 import { useUserStore } from '../../store/userStore';
@@ -10,15 +9,15 @@ import { IngredientUnit } from '../../types/ingredientUnit';
 import * as ImagePicker from 'expo-image-picker';
 import { createStyles } from './AddIngredient.styles';
 import { useTheme } from '../../hooks/useTheme';
-import CustomAlert from '../../components/modals/CustomAlert';
+import CustomAlert from '../../components/modals/CustomAlert/CustomAlert';
+import CustomSelect from '../../components/modals/CustomSelect/CustomSelect';
 
 export default function AddIngredientScreen() {
   const navigation = useNavigation();
   const route = useRoute<any>();
-
   const { theme } = useTheme();
   const styles = createStyles(theme);
-  
+
   const { ingredientId } = route.params || {};
   const isEditMode = !!ingredientId;
 
@@ -31,9 +30,7 @@ export default function AddIngredientScreen() {
   const insets = useSafeAreaInsets();
 
   const [name, setName] = useState(ingredient?.name ?? '');
-  const [category, setCategory] = useState<IngredientCategory | null>(
-    ingredient?.category ?? null
-  );
+  const [category, setCategory] = useState<IngredientCategory | null>(ingredient?.category ?? null);
   const [quantity, setQuantity] = useState<number | null>(ingredient?.quantity ?? null);
   const [unit, setUnit] = useState<IngredientUnit | ''>(ingredient?.unit ?? '');
   const [image, setImage] = useState<string | null>(ingredient?.image ?? null);
@@ -100,14 +97,12 @@ export default function AddIngredientScreen() {
       setAlertVisible(true);
       return;
     }
-
     if (!category) {
       setAlertTitle('Validation');
       setAlertMessage('Please select a category');
       setAlertVisible(true);
       return;
     }
-
     if (!currentUser) {
       setAlertTitle('Error');
       setAlertMessage('No user logged in');
@@ -167,18 +162,15 @@ export default function AddIngredientScreen() {
             </View>
 
             <Text style={styles.label}>Category</Text>
-            <View style={styles.inputContainer}>
-              <Picker
-                selectedValue={category}
-                onValueChange={(val) => setCategory(val)}
-                style={{ flex: 1, color: theme.textSecondary }}
-              >
-                <Picker.Item label="Select category" value={null} />
-                {Object.values(IngredientCategory).map((cat) => (
-                  <Picker.Item key={cat} label={cat} value={cat} />
-                ))}
-              </Picker>
-            </View>
+            <CustomSelect
+              options={[
+                { label: 'Select category', value: null },
+                ...Object.values(IngredientCategory).map((cat) => ({ label: cat, value: cat })),
+              ]}
+              selectedValue={category}
+              onValueChange={setCategory}
+              placeholder="Select category"
+            />
 
             <Text style={styles.label}>Quantity</Text>
             <View style={styles.inputContainer}>
@@ -193,44 +185,30 @@ export default function AddIngredientScreen() {
             </View>
 
             <Text style={styles.label}>Unit</Text>
-            <View style={styles.inputContainer}>
-              <Picker
-                selectedValue={unit}
-                onValueChange={(val) => setUnit(val)}
-                style={{ flex: 1, color: theme.textSecondary }}
-              >
-                <Picker.Item label="Select unit" value="" />
-                {Object.values(IngredientUnit).map((u) => (
-                  <Picker.Item key={u} label={u} value={u} />
-                ))}
-              </Picker>
-            </View>
+            <CustomSelect
+              options={[
+                { label: 'Select unit', value: '' },
+                ...Object.values(IngredientUnit).map((u) => ({ label: u, value: u })),
+              ]}
+              selectedValue={unit}
+              onValueChange={setUnit}
+              placeholder="Select unit"
+            />
 
             <Text style={styles.label}>Image</Text>
             <View style={{ flexDirection: 'row', gap: 10, marginBottom: 10 }}>
-              <TouchableOpacity
-                style={styles.secondaryButton}
-                onPress={pickImageFromCamera}
-              >
+              <TouchableOpacity style={styles.secondaryButton} onPress={pickImageFromCamera}>
                 <Text style={styles.primaryButtonText}>Take Photo</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                style={styles.secondaryButton}
-                onPress={pickImageFromGallery}
-              >
+              <TouchableOpacity style={styles.secondaryButton} onPress={pickImageFromGallery}>
                 <Text style={styles.primaryButtonText}>Pick from Gallery</Text>
               </TouchableOpacity>
             </View>
 
-            {image && (
-              <Image source={{ uri: image }} style={styles.imagePreview} />
-            )}
+            {image && <Image source={{ uri: image }} style={styles.imagePreview} />}
 
-            <TouchableOpacity
-              style={[styles.primaryButton, { marginTop: 20 }]}
-              onPress={handleSubmit}
-            >
+            <TouchableOpacity style={[styles.primaryButton, { marginTop: 20 }]} onPress={handleSubmit}>
               <Text style={styles.primaryButtonText}>Save</Text>
             </TouchableOpacity>
           </View>
