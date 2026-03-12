@@ -12,6 +12,8 @@ import { isIngredientMissing } from '../../utils/pantry';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '../../hooks/useTheme';
 import CustomAlert from '../../components/modals/CustomAlert/CustomAlert';
+import placeholderImage from '../../../assets/images/placeholder_recipe.jpg';
+
 
 export default function DetailedRecipeScreen() {
   const route = useRoute<any>();
@@ -126,6 +128,9 @@ export default function DetailedRecipeScreen() {
   const cleanedSummary = recipe.summary?.replace(/<[^>]+>/g, '') ?? '';
   const cleanedHtmlInstructions = recipe.instructions?.replace(/<[^>]+>/g, '') ?? '';
 
+  const [imageError, setImageError] = useState(false);
+  const heroImageSource = !imageError && recipe.image ? { uri: recipe.image } : placeholderImage;
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -134,7 +139,11 @@ export default function DetailedRecipeScreen() {
         contentContainerStyle={{ paddingBottom: 120 + insets.bottom }}
       >
         <View style={styles.heroContainer}>
-          <Image source={{ uri: recipe.image }} style={styles.heroImage} />
+          <Image
+            source={heroImageSource}
+            style={styles.heroImage}
+            onError={() => setImageError(true)}
+          />
           <View style={styles.heroOverlay} />
           <View style={styles.heroContent}>
             <Text style={styles.heroTitle}>{recipe.title}</Text>

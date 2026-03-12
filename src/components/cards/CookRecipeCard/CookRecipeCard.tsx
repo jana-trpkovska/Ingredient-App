@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { useTheme } from "../../../hooks/useTheme";
 import { createStyles } from "./CookRecipeCard.styles";
+import placeholderImage from '../../../../assets/images/placeholder_recipe.jpg';
 
 type Props = {
   title: string;
@@ -15,17 +16,19 @@ export default function CookRecipeCard({ title, image, cookable, onPress, onRemo
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const [imageError, setImageError] = useState(false);
+  const imageSource = !imageError && image ? { uri: image } : placeholderImage;
+
   return (
     <TouchableOpacity
       style={[styles.card, !cookable && styles.cardDisabled]}
       onPress={onPress}
     >
-      {image && (
-        <Image
-          source={{ uri: image }}
-          style={[styles.image, !cookable && { opacity: 0.4 }]}
-        />
-      )}
+      <Image
+        source={imageSource}
+        style={[styles.image, !cookable && { opacity: 0.4 }]}
+        onError={() => setImageError(true)}
+      />
 
       <View style={styles.info}>
         <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>

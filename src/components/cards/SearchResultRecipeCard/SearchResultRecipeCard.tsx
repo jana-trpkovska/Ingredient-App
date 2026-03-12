@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useTheme } from "../../../hooks/useTheme";
 import { createStyles } from "./SearchResultRecipeCard.styles";
 import { IngredientSearchRecipe } from "../../../types/recipe";
+import placeholderImage from '../../../../assets/images/placeholder_recipe.jpg';
 
 type Props = {
   recipe: IngredientSearchRecipe;
@@ -16,9 +17,16 @@ export default function SearchResultRecipeCard({ recipe, saved, onPress, onToggl
   const { theme } = useTheme();
   const styles = createStyles(theme);
 
+  const [imageError, setImageError] = useState(false);
+  const imageSource = !imageError && recipe.image ? { uri: recipe.image } : placeholderImage;
+
   return (
     <TouchableOpacity style={styles.card} onPress={onPress}>
-      {recipe.image && <Image source={{ uri: recipe.image }} style={styles.image} />}
+      <Image
+        source={imageSource}
+        style={styles.image}
+        onError={() => setImageError(true)}
+      />
       <View style={styles.info}>
         <Text style={styles.title}>{recipe.title}</Text>
         <Text style={styles.subtitle}>
