@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ScrollView, Image } from 'react-native';
 import IngredientCard from '../../components/cards/IngredientCard';
 import { useIngredientStore } from '../../store/ingredientStore';
@@ -9,6 +9,7 @@ import { useTheme } from '../../hooks/useTheme';
 import emptyStateImgLight from '../../../assets/images/home_empty_state_light.png';
 import emptyStateImgDark from '../../../assets/images/home_empty_state_dark.png';
 import noIngredientsImg from '../../../assets/images/no_ingredients.png';
+import Animated, { LinearTransition, FadeIn, FadeOut, FadeInDown } from 'react-native-reanimated';
 
 const CATEGORY_FILTERS = [
   { label: IngredientCategory.PRODUCE, image: require('../../../assets/images/produce.png') },
@@ -49,7 +50,11 @@ export default function HomeScreen({ navigation }: any) {
       const isFridgeEmpty = ingredients.length === 0;
 
       return (
-        <View style={styles.contentWrapper}>
+        <Animated.View 
+          layout={LinearTransition.springify()}
+          entering={FadeIn.duration(200)}
+          style={styles.contentWrapper}
+        >
           <View style={styles.emptyContainer}>
             <Image
               source={isFridgeEmpty ? emptyStateImg : noIngredientsImg}
@@ -66,7 +71,7 @@ export default function HomeScreen({ navigation }: any) {
                 : 'There are no ingredients in this category yet.'}
             </Text>
           </View>
-        </View>
+        </Animated.View>
       );
     }
 
@@ -77,14 +82,19 @@ export default function HomeScreen({ navigation }: any) {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listContent}
         renderItem={({ item }) => (
-          <IngredientCard
-            ingredient={item}
-            onPress={() =>
-              navigation.navigate('IngredientDetails', {
-                ingredientId: item.id,
-              })
-            }
-          />
+          <Animated.View 
+            layout={LinearTransition.springify()}
+            style={{backgroundColor: theme.background}}>
+            <IngredientCard
+              ingredient={item}
+              onPress={() =>
+                navigation.navigate('IngredientDetails', {
+                  ingredientId: item.id,
+                })
+              }
+            />
+          </Animated.View>
+          
         )}
       />
     );
@@ -135,9 +145,11 @@ export default function HomeScreen({ navigation }: any) {
       {renderContent()}
 
       {currentUser && (
-        <TouchableOpacity style={styles.fixedButton} onPress={handleAddIngredient}>
-          <Text style={styles.fixedButtonText}>Add Ingredient</Text>
-        </TouchableOpacity>
+        <Animated.View entering={FadeInDown.duration(300)} style={[styles.fixedButton]}>
+          <TouchableOpacity onPress={handleAddIngredient}>
+            <Text style={styles.fixedButtonText}>Add Ingredient</Text>
+          </TouchableOpacity>
+        </Animated.View>
       )}
     </View>
   );

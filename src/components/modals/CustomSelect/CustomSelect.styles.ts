@@ -15,7 +15,7 @@ export const createStyles = (theme: any) =>
       backgroundColor: theme.inputBackground,
     },
     selectedText: {
-      color: theme.text,
+      color: theme.textPrimary,
       fontSize: 16,
     },
     placeholderText: {

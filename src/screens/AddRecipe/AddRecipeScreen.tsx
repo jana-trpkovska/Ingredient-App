@@ -13,6 +13,8 @@ import SearchResultRecipeCard from "../../components/cards/SearchResultRecipeCar
 import noIngredientsLight from "../../../assets/images/no_select_ingredients_light.png";
 import noIngredientsDark from "../../../assets/images/no_select_ingredients_dark.png";
 
+import Animated, { FadeInDown, LinearTransition } from "react-native-reanimated";
+
 export default function AddRecipeScreen({ navigation }: any) {
   const { ingredients } = useIngredientStore();
   const { searchRecipes, searchResults, saveRecipe, isRecipeSaved, removeRecipe, apiMessage, clearApiMessage, clearSearchResults } = useRecipeStore();
@@ -20,13 +22,14 @@ export default function AddRecipeScreen({ navigation }: any) {
 
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>([]);
   const [showNoIngredientsMessage, setShowNoIngredientsMessage] = useState(false);
+  const [screenKey, setScreenKey] = useState(0);
 
   const { theme, isDark } = useTheme();
   const styles = createStyles(theme);
 
   const toggleIngredient = (name: string) => {
-    setSelectedIngredients(prev =>
-      prev.includes(name) ? prev.filter(i => i !== name) : [...prev, name]
+    setSelectedIngredients((prev) =>
+      prev.includes(name) ? prev.filter((i) => i !== name) : [...prev, name]
     );
     if (selectedIngredients.length === 0) setShowNoIngredientsMessage(false);
   };
@@ -50,6 +53,7 @@ export default function AddRecipeScreen({ navigation }: any) {
 
   useFocusEffect(
     useCallback(() => {
+      setScreenKey(prev => prev + 1);
       clearApiMessage();
       clearSearchResults();
       setSelectedIngredients([]);
@@ -61,7 +65,7 @@ export default function AddRecipeScreen({ navigation }: any) {
   const noIngredientsImg = isDark ? noIngredientsDark : noIngredientsLight;
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView key={screenKey} contentContainerStyle={styles.container}>
       <Text style={styles.sectionTitle}>Select Ingredients</Text>
 
       <View style={styles.ingredientListContainer}>
@@ -71,7 +75,7 @@ export default function AddRecipeScreen({ navigation }: any) {
           showsVerticalScrollIndicator
           nestedScrollEnabled
         >
-          {ingredients.map(item => (
+          {ingredients.map((item) => (
             <SelectableIngredientCard
               key={item.id}
               name={item.name}
@@ -112,23 +116,30 @@ export default function AddRecipeScreen({ navigation }: any) {
       <Text style={styles.sectionTitle}>Results</Text>
 
       {apiMessage ? (
-        <Text style={[styles.emptyText, { color: theme.danger, textAlign: 'center' }]}>
+        <Text style={[styles.emptyText, { color: theme.danger, textAlign: "center" }]}>
           {apiMessage}
         </Text>
       ) : searchResults.length === 0 ? (
         <Text style={styles.emptyText}>No recipes found. Try searching!</Text>
       ) : (
         <View style={styles.recipeList}>
-          {searchResults.map(item => (
-            <SearchResultRecipeCard
+          {searchResults.map((item, index) => (
+            <Animated.View
               key={item.id}
-              recipe={item}
-              saved={isRecipeSaved(item.id)}
-              onToggleSave={() =>
-                isRecipeSaved(item.id) ? removeRecipe(item.id) : saveRecipe(item.id)
-              }
-              onPress={() => navigation.navigate("DetailedRecipe", { recipeId: item.id })}
-            />
+              entering={FadeInDown.delay(index * 50)}
+              layout={LinearTransition.springify()}
+            >
+              <SearchResultRecipeCard
+                recipe={item}
+                saved={isRecipeSaved(item.id)}
+                onToggleSave={() =>
+                  isRecipeSaved(item.id) ? removeRecipe(item.id) : saveRecipe(item.id)
+                }
+                onPress={() =>
+                  navigation.navigate("DetailedRecipe", { recipeId: item.id })
+                }
+              />
+            </Animated.View>
           ))}
         </View>
       )}

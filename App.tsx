@@ -3,6 +3,7 @@ import AppNavigator from './src/navigation/AppNavigator';
 import { StatusBar } from 'expo-status-bar';
 import { initDB } from './src/services/database';
 import { useEffect, useState } from 'react';
+import Animated, { LinearTransition, FadeIn, FadeOut, FadeInDown } from 'react-native-reanimated';
 
 import { useUserStore } from './src/store/userStore';
 import { useIngredientStore } from './src/store/ingredientStore';
@@ -62,9 +63,12 @@ export default function App() {
   }
 
   return (
-    <>
+    <Animated.View 
+      style={{ flex: 1 }} 
+      entering={FadeInDown.duration(800).withInitialValues({ opacity: 0.6 })}
+    >
       <StatusBar style="dark" />
       <AppNavigator />
-    </>
+    </Animated.View>
   );
 }
