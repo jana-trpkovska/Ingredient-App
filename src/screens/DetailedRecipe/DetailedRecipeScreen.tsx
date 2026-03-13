@@ -14,7 +14,6 @@ import { useTheme } from '../../hooks/useTheme';
 import CustomAlert from '../../components/modals/CustomAlert/CustomAlert';
 import placeholderImage from '../../../assets/images/placeholder_recipe.jpg';
 
-
 export default function DetailedRecipeScreen() {
   const route = useRoute<any>();
   const { recipeId } = route.params;
@@ -23,9 +22,14 @@ export default function DetailedRecipeScreen() {
   const userIngredients = useIngredientStore((state) => state.ingredients);
   const removeIngredient = useIngredientStore((state) => state.removeIngredient);
 
-  const savedRecipe = savedRecipes.find(r => r.id === recipeId);
-  const [recipe, setRecipe] = useState<DetailedRecipe | null>(savedRecipe || null);
+  const savedRecipe = savedRecipes.find(r => r.id === recipeId) || null;
+
+  const [recipe, setRecipe] = useState<DetailedRecipe | null>(savedRecipe);
   const [loading, setLoading] = useState(!savedRecipe);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState('');
+  const [alertMessage, setAlertMessage] = useState('');
+  const [imageError, setImageError] = useState(false);
 
   const insets = useSafeAreaInsets();
   const { theme } = useTheme();
@@ -43,9 +47,6 @@ export default function DetailedRecipeScreen() {
     );
   }, [recipe, userPantryNames]);
 
-  const [alertVisible, setAlertVisible] = useState(false);
-  const [alertTitle, setAlertTitle] = useState('');
-  const [alertMessage, setAlertMessage] = useState('');
 
   useEffect(() => {
     if (recipe) return;
@@ -54,30 +55,26 @@ export default function DetailedRecipeScreen() {
       setLoading(true);
       const data = await getRecipeDetailsById(recipeId);
 
-      if (data && 'error' in data && data.error) {
+      if (!data || ('error' in data && data.error)) {
         setRecipe(null);
         setAlertTitle('Error');
-        setAlertMessage('Failed to load recipe');
+        setAlertMessage('Recipe not found or failed to load');
         setAlertVisible(true);
-      } else if (data) {
-        setRecipe(data as DetailedRecipe);
       } else {
-        setRecipe(null);
-        setAlertTitle('Error');
-        setAlertMessage('Recipe not found');
-        setAlertVisible(true);
+        setRecipe(data as DetailedRecipe);
       }
 
       setLoading(false);
     };
+
     loadRecipe();
   }, [recipeId]);
 
+
   useEffect(() => {
-    if (apiMessage) {
-      const timer = setTimeout(() => clearApiMessage(), 5000);
-      return () => clearTimeout(timer);
-    }
+    if (!apiMessage) return;
+    const timer = setTimeout(() => clearApiMessage(), 5000);
+    return () => clearTimeout(timer);
   }, [apiMessage]);
 
   const handleCookRecipe = () => {
@@ -98,37 +95,29 @@ export default function DetailedRecipeScreen() {
     setAlertVisible(true);
   };
 
-  if (loading) {
-    return (
-      <View style={styles.center}>
-        <ActivityIndicator size="large" color={theme.primary} />
-      </View>
-    );
-  }
+  if (loading) return (
+    <View style={styles.center}>
+      <ActivityIndicator size="large" color={theme.primary} />
+    </View>
+  );
 
-  if (apiMessage) {
-    return (
-      <View style={styles.center}>
-        <Text style={{ color: theme.danger, textAlign: 'center' }}>
-          {apiMessage}
-        </Text>
-      </View>
-    );
-  }
+  if (apiMessage) return (
+    <View style={styles.center}>
+      <Text style={{ color: theme.danger, textAlign: 'center' }}>
+        {apiMessage}
+      </Text>
+    </View>
+  );
 
-  if (!recipe) {
-    return (
-      <View style={styles.center}>
-        <Text>Recipe not found.</Text>
-      </View>
-    );
-  }
+  if (!recipe) return (
+    <View style={styles.center}>
+      <Text>Recipe not found.</Text>
+    </View>
+  );
 
   const structuredSteps = recipe.analyzedInstructions?.[0]?.steps ?? [];
   const cleanedSummary = recipe.summary?.replace(/<[^>]+>/g, '') ?? '';
   const cleanedHtmlInstructions = recipe.instructions?.replace(/<[^>]+>/g, '') ?? '';
-
-  const [imageError, setImageError] = useState(false);
   const heroImageSource = !imageError && recipe.image ? { uri: recipe.image } : placeholderImage;
 
   return (
@@ -147,13 +136,11 @@ export default function DetailedRecipeScreen() {
           <View style={styles.heroOverlay} />
           <View style={styles.heroContent}>
             <Text style={styles.heroTitle}>{recipe.title}</Text>
-
             <View style={styles.heroInfoRow}>
               <View style={styles.heroInfoItem}>
                 <Image source={timerIcon} style={styles.heroInfoIcon} />
                 <Text style={styles.heroInfoText}>{recipe.readyInMinutes} mins</Text>
               </View>
-
               <View style={styles.heroInfoItem}>
                 <Image source={servingsIcon} style={styles.heroInfoIcon} />
                 <Text style={styles.heroInfoText}>{recipe.servings} servings</Text>
